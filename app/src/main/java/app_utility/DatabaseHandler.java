@@ -718,7 +718,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String sName;
         SQLiteDatabase db = getReadableDatabase();
         cursor = db.query(TABLE_INDIVIDUAL_PRODUCTS, new String[]{KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_VALUE,
-                }, KEY_INDIVIDUAL_PRODUCT_NAMES + "=?",
+                }, KEY_ID + "=?",
                 new String[]{String.valueOf(sID)}, null, null, null, null);
         //cursor = db.rawQuery("SELECT TABLEALL FROM last_seen WHERE _id" +" = "+ID +" ", new String[] {KEY_ID + ""});
         if (cursor.getCount() > 0) {

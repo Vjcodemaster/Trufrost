@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid
+        android:color="@android:color/white"/>
+    <corners
+        android:radius="@dimen/drawable_dialog_bg_radius"/>
+    <padding
+        android:bottom="@dimen/drawable_dialog_bg_padding"
+        android:left="@dimen/drawable_dialog_bg_padding"
+        android:right="@dimen/drawable_dialog_bg_padding"
+        android:top="@dimen/drawable_dialog_bg_padding"/>
+</shape>

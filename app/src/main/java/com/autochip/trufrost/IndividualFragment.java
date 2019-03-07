@@ -3,12 +3,20 @@ package com.autochip.trufrost;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -16,16 +24,21 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import app_utility.DataBaseHelper;
 import app_utility.DatabaseHandler;
 import app_utility.IndividualProductRVAdapter;
 import app_utility.OnFragmentInteractionListener;
+import app_utility.ZoomOutPageTransformer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +48,7 @@ import app_utility.OnFragmentInteractionListener;
  * Use the {@link IndividualFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndividualFragment extends Fragment {
+public class IndividualFragment extends Fragment implements OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,11 +59,13 @@ public class IndividualFragment extends Fragment {
     private String mParam2;
     private int mParam3;
 
+    int imagePathPosition = 0;
+
     DatabaseHandler dbh;
 
     TextView tvProductName, tvProductDescription;
     RecyclerView recyclerViewImages;
-    private OnFragmentInteractionListener mListener;
+    public static OnFragmentInteractionListener mListener;
 
     String[] saImagePath;
 
@@ -65,7 +80,14 @@ public class IndividualFragment extends Fragment {
     TextView[] tvTechSpecsValues;
     TableLayout tlTechnicalSpecs;
 
-    ImageView ivMainImage;
+    ImageView ivMainImage, ivBlurImage;
+
+    ViewPager mViewPagerSlideShow;
+    ImageView ivLeftArrow;
+    ImageView ivRightArrow;
+    ArrayList<String> alImagesPath;
+
+
 
     public IndividualFragment() {
         // Required empty public constructor
@@ -99,6 +121,7 @@ public class IndividualFragment extends Fragment {
             mParam3 = getArguments().getInt(ARG_PARAM3);
         }
         dbh = new DatabaseHandler(getActivity());
+        mListener = this;
     }
 
     @Override
@@ -123,6 +146,14 @@ public class IndividualFragment extends Fragment {
         tvProductDescription.setText(mParam2);
         tlTechnicalSpecs = view.findViewById(R.id.tl_technical_specs);
         ivMainImage = view.findViewById(R.id.iv_main_image);
+
+        ivMainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initImagePreviewDialog();
+                dialogViewPager.show();
+            }
+        });
 
         tableRowHeading = new TableRow(getActivity());
         tableRowHeading.setBackgroundColor(getActivity().getResources().getColor(android.R.color.white));
@@ -151,7 +182,7 @@ public class IndividualFragment extends Fragment {
         //recyclerView.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
         //
         // saImagePath = dbh.getImagePathFromProducts(mParam3).split(",");
-        ArrayList<String> alImagesPath = new ArrayList<>(Arrays.asList(dbh.getImagePathFromProducts(mParam3).split(",")));
+        alImagesPath = new ArrayList<>(Arrays.asList(dbh.getImagePathFromProducts(mParam3).split(",")));
         Uri uri = Uri.fromFile(new File(alImagesPath.get(0)));
         ivMainImage.setImageURI(uri);
         individualProductRVAdapter= new IndividualProductRVAdapter(getActivity(), recyclerViewImages, alImagesPath);
@@ -159,6 +190,8 @@ public class IndividualFragment extends Fragment {
     }
 
     private void getData(){
+        ArrayList<DataBaseHelper> arrayList = new ArrayList<>(dbh.getAllMainProducts());
+        ArrayList<DataBaseHelper> arrayList1 = new ArrayList<>(dbh.getAllProductsData1());
         alTechHeading = new ArrayList<>(Arrays.asList(dbh.getProductTechSpecHeading(mParam3).split(",")));
         alTechValues = new ArrayList<>(Arrays.asList(dbh.getProductTechSpecValue(mParam3).split(",")));
 
@@ -170,6 +203,7 @@ public class IndividualFragment extends Fragment {
             addDynamicTextViewTechSpecsHeading(i);
             addDynamicTextViewTechSpecsValues(i);
         }
+
     }
 
     private void addDynamicTextViewTechSpecsHeading(int i) {
@@ -216,6 +250,104 @@ public class IndividualFragment extends Fragment {
         }
     }
 
+    private void initImagePreviewDialog() {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.dialog_view_pager, null);
+        Rect displayRectangle = new Rect();
+        Window window = getActivity().getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+        layout.setMinimumWidth((int) (displayRectangle.width() * 0.9f));
+        layout.setMinimumHeight((int) (displayRectangle.height() * 0.9f));
+        dialogViewPager = new Dialog(getActivity());
+        dialogViewPager.setContentView(layout);
+        dialogViewPager.setCancelable(true);
+
+        //TextView tvHeading = dialogViewPager.findViewById(R.id.tv_readmore_heading);
+        TextView tvClosePreview = dialogViewPager.findViewById(R.id.tv_close_dialog);
+        ivBlurImage = dialogViewPager.findViewById(R.id.iv_blur_bg);
+
+        tvClosePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogViewPager.dismiss();
+            }
+        });
+        mViewPagerSlideShow = dialogViewPager.findViewById(R.id.viewpager_image_dialog);
+        mViewPagerSlideShow.setOffscreenPageLimit(3);
+
+
+        ivLeftArrow = dialogViewPager.findViewById(R.id.iv_dialog_left_arrow);
+        ivRightArrow = dialogViewPager.findViewById(R.id.iv_dialog_right_arrow);
+
+        ivLeftArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPagerSlideShow.setCurrentItem(mViewPagerSlideShow.getCurrentItem() - 1);
+            }
+        });
+
+        ivRightArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPagerSlideShow.setCurrentItem(mViewPagerSlideShow.getCurrentItem() + 1);
+            }
+        });
+
+        mViewPagerSlideShow.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                handleArrow(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mViewPagerSlideShow.setPageTransformer(false, new ViewPager.PageTransformer()
+
+        {
+            @Override
+            public void transformPage(View page, float position) {
+                ZoomOutPageTransformer zoomOutPageTransformer = new ZoomOutPageTransformer();
+                zoomOutPageTransformer.transformPage(page, position);
+            }
+        });
+
+        final DialogImagePagerAdapter dialogImagePagerAdapter = new DialogImagePagerAdapter(getActivity(), alImagesPath);
+        mViewPagerSlideShow.setAdapter(dialogImagePagerAdapter);
+        mViewPagerSlideShow.setCurrentItem(imagePathPosition);
+        handleArrow(imagePathPosition);
+        //takeScreenshot();
+        /*Typeface lightFace = Typeface.createFromAsset(getResources().getAssets(), "fonts/myriad_pro_light.ttf");
+        Typeface regularFace = Typeface.createFromAsset(getResources().getAssets(), "fonts/myriad_pro_regular.ttf");
+        tvHeading.setTypeface(regularFace);*/
+        //tvSubHeading.setTypeface(lightFace);
+        //tvDescription.setTypeface(lightFace);
+    }
+
+    private void handleArrow(int position) {
+        if (position == 0 && mViewPagerSlideShow.getAdapter().getCount() == 1) {
+            ivLeftArrow.setVisibility(View.GONE);
+            ivRightArrow.setVisibility(View.GONE);
+        } else if(position == 0 && mViewPagerSlideShow.getAdapter().getCount() > 1){
+            ivLeftArrow.setVisibility(View.GONE);
+            ivRightArrow.setVisibility(View.VISIBLE);
+        }else if (position == alImagesPath.size() - 1) {
+            ivRightArrow.setVisibility(View.GONE);
+            ivLeftArrow.setVisibility(View.VISIBLE);
+        } else {
+            ivLeftArrow.setVisibility(View.VISIBLE);
+            ivRightArrow.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -233,4 +365,60 @@ public class IndividualFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onFragmentMessage(String sMsg, int type, String sResults, String sResult) {
+        switch (sMsg){
+            case "IMAGE_CLICKED":
+                Uri uri = Uri.fromFile(new File(sResult));
+                imagePathPosition = type;
+                //mViewPagerSlideShow.setCurrentItem(imagePathPosition);
+                ivMainImage.setImageURI(uri);
+                break;
+        }
+    }
+
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getActivity().getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            ivBlurImage.setImageBitmap(blurBitmap(bitmap));
+            v1.setDrawingCacheEnabled(false);
+
+            /*File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();*/
+
+            //openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap blurBitmap(Bitmap bitmap){
+        RenderScript rs = RenderScript.create(getActivity());
+        Allocation input = Allocation.createFromBitmap(rs, bitmap,
+                Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        Allocation output = Allocation.createTyped(rs, input.getType());
+        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setRadius(25);
+        script.setInput(input);
+
+        script.forEach(output);
+        output.copyTo(bitmap);
+
+        return bitmap;
+    }
 }

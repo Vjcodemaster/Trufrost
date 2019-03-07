@@ -49,6 +49,7 @@ public class SubCategoryFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     Button[] btnSubCategoryArray;
+    LinearLayout llDynamicSecondParent;
     ArrayList<DataBaseHelper> dbData;
     LinearLayout llDynamicParent;
     DatabaseHandler dbh;
@@ -61,6 +62,8 @@ public class SubCategoryFragment extends Fragment {
     Button btnPreviousClicked = null;
 
     String sPreviousCategoryname = "";
+
+    ArrayList<String> alCategories = new ArrayList<>();
 
     public SubCategoryFragment() {
         // Required empty public constructor
@@ -142,10 +145,12 @@ public class SubCategoryFragment extends Fragment {
 
     private void getData() {
         dbData = new ArrayList<>(dbh.getAllMainProducts());
+        //dbData = new ArrayList<>(dbh.getAllProductsData1());
         for (int i = 0; i < dbData.size(); i++) {
             if (dbData.get(i).get_main_product_names().equals(mParam1)) {
                 //alSubCategory = new ArrayList<>(Arrays.asList(al.get(i).get_product_category_names().split(",,")));
                 sSubCategory = dbData.get(i).get_product_category_names();
+                //alCategories.add(sSubCategory);
                 break;
             }
         }
@@ -220,7 +225,7 @@ public class SubCategoryFragment extends Fragment {
 
     private void addDynamicContentsForSubCategory(int i, ArrayList<String> alSubCategory) {
         //Button btnDynamic = new Button(HomeScreenActivity.this);
-
+        llDynamicSecondParent = new LinearLayout(getActivity());
         btnSubCategoryArray[i] = new Button(getActivity());
 
         btnSubCategoryArray[i].setTag(alSubCategory.get(i));
@@ -232,8 +237,9 @@ public class SubCategoryFragment extends Fragment {
             btnSubCategoryArray[i].setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
         }
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMarginStart(5);
-        params.setMarginEnd(5);
+        //params.setMarginStart(5);
+        //params.setMarginEnd(5);
+        params.setMargins(0, 10, 5, 0);
         btnSubCategoryArray[i].setLayoutParams(params);
         btnSubCategoryArray[i].setText(alSubCategory.get(i));
         btnSubCategoryArray[i].setTextColor(getResources().getColor(R.color.darkBlue));
@@ -243,10 +249,12 @@ public class SubCategoryFragment extends Fragment {
         Drawable img = getContext().getResources().getDrawable(R.drawable.down_arrow, null);
         img.setBounds(0, 0, 30, 30);
         btnSubCategoryArray[i].setCompoundDrawables(null, null, img, null);
-        btnSubCategoryArray[i].setCompoundDrawablePadding(6);
+        btnSubCategoryArray[i].setCompoundDrawablePadding(10);
         btnSubCategoryArray[i].setBackgroundResource(typedValue.resourceId);
+        btnSubCategoryArray[i].setBackground(getResources().getDrawable(R.drawable.cornered_button));
         btnSubCategoryArray[i].setAllCaps(false);
-        llDynamicParent.addView(btnSubCategoryArray[i]);
+        llDynamicSecondParent.addView(btnSubCategoryArray[i]);
+        llDynamicParent.addView(llDynamicSecondParent);
     }
 
     /*private void handleExpandableLayout() {

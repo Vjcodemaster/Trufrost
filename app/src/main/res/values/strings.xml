@@ -47,6 +47,7 @@
         Refrigeration, Mobile Coolers, Blood Platelet Incubators and Lab use Ice Flake Machines.
         Team Trufrost also has a proven expertise in design, supply and installation of walk in coolers and freezers for larger applications.</string>
 
+
     <string-array name="description">
         <item>@string/commercial_kitchens</item>
         <item>@string/bars_pubs</item>

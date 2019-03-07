@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- #80FFFFFF color defines white color with 80% alpha-->
+    <solid
+        android:color="@color/darkBlue"/>
+
+    <size
+        android:width="@dimen/drawable_arrow_bg"
+        android:height="@dimen/drawable_arrow_bg"/>
+</shape>

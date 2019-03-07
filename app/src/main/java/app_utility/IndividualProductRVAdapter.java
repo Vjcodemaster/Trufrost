@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.autochip.trufrost.HomeScreenActivity;
+import com.autochip.trufrost.IndividualFragment;
 import com.autochip.trufrost.R;
 
 import java.io.File;
@@ -67,6 +68,14 @@ public class IndividualProductRVAdapter extends RecyclerView.Adapter<IndividualP
 
         Uri uri = Uri.fromFile(new File(alImagesPath.get(position)));
         holder.ivProducts.setImageURI(uri);
+
+        holder.ivProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IndividualFragment.mListener.onFragmentMessage("IMAGE_CLICKED", position, "",alImagesPath.get(position));
+            }
+        });
+
         /*holder.ivProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

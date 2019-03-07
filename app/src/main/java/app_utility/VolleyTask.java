@@ -208,7 +208,8 @@ public class VolleyTask {
                             sb.append(sMainCategory);
                             alProducts = new ArrayList<>();
 
-                            if (lhm.get(sMainCategory) != null) {
+
+                            /*if (lhm.get(sMainCategory) != null) {
                                 hm = new HashMap<>(Objects.requireNonNull(lhm.get(sMainCategory)));
                                 if (hm.get(sSubCategory) != null) {
                                     alProducts.addAll(Objects.requireNonNull(hm.get(sSubCategory)));
@@ -223,6 +224,60 @@ public class VolleyTask {
                                 hm.put(sSubCategory, alProducts);
                                 lhm.put(sMainCategory, hm);
                             }
+                        }*/
+                            if(lhm.get(sMainCategory)==null){
+                                hm = new HashMap<>();
+                                alProducts.add(sb.toString());
+                                hm.put(sSubCategory, alProducts);
+                                lhm.put(sMainCategory, hm);
+                            } else if(lhm.get(sMainCategory)!=null){
+                                HashMap<String, ArrayList<String>> hmTmp = new HashMap<>(lhm.get(sMainCategory));
+                                /*if(hmTmp.get(sSubCategory)==null){
+                                    hm = new HashMap<>();
+                                    alProducts.add(sb.toString());
+                                    hm.put(sSubCategory, alProducts);
+                                    lhm.put(sMainCategory, hm);
+                                } else*/{
+                                    ArrayList<String> altmp;
+                                    hm = new HashMap<>(lhm.get(sMainCategory));
+                                    if (hm.get(sSubCategory)!=null){
+                                        altmp = new ArrayList<>(hm.get(sSubCategory));
+                                        altmp.add(sb.toString());
+                                        hm.put(sSubCategory, altmp);
+                                        lhm.put(sMainCategory, hm);
+                                    } else {
+                                        alProducts.add(sb.toString());
+                                        hm.put(sSubCategory, alProducts);
+                                        lhm.put(sMainCategory, hm);
+                                    }
+                                }
+                            }
+                            /*if (lhm.get(sMainCategory) != null) {
+                                hm = new HashMap<>(Objects.requireNonNull(lhm.get(sMainCategory)));
+                                if (hm.get(sSubCategory) != null) {
+                                    //alProducts.addAll(Objects.requireNonNull(hm.get(sSubCategory)));
+                                    alProducts.add(sb.toString());
+                                    //hm = new HashMap<>();
+                                    hm = new HashMap<>(lhm.get(sMainCategory));
+                                    alProducts.addAll(hm.get(sSubCategory));
+                                    alProducts.add(sb.toString());
+                                    hm.put(sSubCategory, alProducts);
+                                    lhm.put(sMainCategory, hm);
+                                } else {
+                                    if(lhm.get(sMainCategory)!=null) {
+                                        //hm = new HashMap<>();
+                                        hm = new HashMap<>();
+                                        alProducts.add(sb.toString());
+                                        hm.put(sSubCategory, alProducts);
+                                        lhm.put(sMainCategory, hm);
+                                    }
+                                }
+                            } else {
+                                hm = new HashMap<>();
+                                alProducts.add(sb.toString());
+                                hm.put(sSubCategory, alProducts);
+                                lhm.put(sMainCategory, hm);
+                            }*/
                         }
                         ArrayList<String> alMainMenuKey = new ArrayList<>(lhm.keySet());
 
