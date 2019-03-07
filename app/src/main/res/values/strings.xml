@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Trufrost</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">Professional chefs can now enjoy the benefits of reliable equipment built with reputed European refrigeration
+        system &amp; controllers, high quality stainless steel and energy saving design with our products that include Refrigerated Reach-In
+        Cabinets, Undercounters, Preparation Counters, Chef Tables, Saladettes, Countertop Displays, Blast Freezers &amp; Chillers and a
+        complete range of Ice Cube Making Machines. Team Trufrost also has a proven expertise in design, supply and  installation of
+        walk in coolers and freezers for commercial kitchens. \n \n
+        Our Butler range of cooking products, coffee machines and blenders , food preparation and bakery products complement the Trufrost
+        rangeof cooling products to comprehensively address the  foodservice equipment needs of commercial kitchens and coffee shops.</string>
+
+    <string name="commercial_kitchens">Professional chefs can now enjoy the benefits of reliable equipment built with reputed European refrigeration
+        system &amp; controllers, high quality stainless steel and energy saving design with our products that include Refrigerated Reach-In
+        Cabinets, Undercounters, Preparation Counters, Chef Tables, Saladettes, Countertop Displays, Blast Freezers &amp; Chillers and a
+        complete range of Ice Cube Making Machines. Team Trufrost also has a proven expertise in design, supply and  installation of
+        walk in coolers and freezers for commercial kitchens. \n \n
+        Our Butler range of cooking products, coffee machines and blenders , food preparation and bakery products complement the Trufrost
+        rangeof cooling products to comprehensively address the  foodservice equipment needs of commercial kitchens and coffee shops.</string>
+
+    <string name="bars_pubs">If you wish to set up a truly world class bar or a pub, Trufrost provides you a distinct advantage with its comprehensive
+        bouquet of bar refrigeration products that include a fabulous range of wine coolers, bottle coolers, undercounter back bars and ice machines for
+        those who care to stand out from the crowd. Team Trufrost also has a proven expertise in design, supply and  installation of wine walls and walk in coolers.
+        Our Butler range of cooking products, coffee machines and blenders , food preparation and bakery products complement the Trufrost range of cooling products to
+        comprehensively address the foodservice equipment needs of bars &amp; pubs.</string>
+
+    <string name="cake_sweet_shop">With Trufrost Display Cases you can virtually upgrade your food business to club class. These world class showcases are built using
+        reliable cooling system, controllers and design elegance that Europe is known for. In short, these are designed to increase your sales… not your problems.
+        Team Trufrost also has a proven expertise in design, supply and  installation of walk in coolers and freezers.
+        Our Butler range of cooking products, coffee machines and blenders , food preparation and bakery products complement the Trufrost range of cooling products to
+        comprehensively address the food service equipment needs of cafes’, cake &amp; sweet shops.</string>
+
+    <string name="food_retail">Trufrost presents a truly world class range of Coolers and Freezers for a wide variety of applications. You can choose between Upright
+        and Chest type versions and capacities that range from 100 litres to 1000 litres. Trufrost also presents a truly high quality range of dispensers designed to
+        help scale up the sales and profitability of ice cream parlours, frozen yogurt outlets, convenience stores, coffee shops,food courts, kiosks and a wide variety
+        of small and medium sized stores. Team Trufrost also has a proven expertise in design, supply and installation of walk in coolers and freezers for larger applications.
+        Our Butler range of cooking products, coffee machines and blenders , food preparation and bakery products complement the Trufrost range of cooling products to comprehensively
+        address the food service equipment needs of food retail business. </string>
+
+    <string name="food_preservation">Be it small walk-in coolers &amp; freezers, or large refrigerated warehouses, we specialize in preservation &amp; storage of products ranging
+        from hospitality, frozen foods, fresh produce, dairy products, beverages, medicines &amp; vaccinations. Having worked in the cold chain industry for over 3 decades, Team
+        Trufrost has done extensive work with leading brands like Accor, Hilton, Marriott, Taj Hotels, Subway, Sanofi, Johnson &amp; Johnson, Ranbaxy, Dinshaw’s, Radisson, Westin,
+        Park Plaza, Haldiram’s, Ramada, Amul, ITC, Oberoi, Shantha Biotechnics, Radha Regent, Cisco and many more names.</string>
+
+    <string name="bio_medical">Trufrost brings to India a comprehensive range of reliable biomedical refrigeration products suitable for hospitals, blood banks, pharmacies, research
+        institutes, laboratories in electronic &amp; chemical plants, fisheries and more with products that include Ultra Low Temp Freezers, Pharmacy Freezers &amp; Coolers, Blood Bank
+        Refrigeration, Mobile Coolers, Blood Platelet Incubators and Lab use Ice Flake Machines.
+        Team Trufrost also has a proven expertise in design, supply and installation of walk in coolers and freezers for larger applications.</string>
+
+    <string-array name="description">
+        <item>@string/commercial_kitchens</item>
+        <item>@string/bars_pubs</item>
+        <item>@string/cake_sweet_shop</item>
+        <item>@string/food_retail</item>
+        <item>@string/food_preservation</item>
+        <item>@string/bio_medical</item>
+    </string-array>
+
+    <!-- related to transition -->
+    <string name="viewpager_transition">viewpager_transition</string>
+
+    <!-- related to progress bar-->
+    <string name="please_wait">Please wait&#8230;</string>
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:theme="@style/ToolbarColoredBackArrow"
+    android:background="@color/darkGray"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/ib_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/app_name" />
+        <!--<TextView
+            android:id="@+id/tv_actionbar_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textAllCaps="false"
+            android:layout_centerInParent="true"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="@android:color/white"
+            android:textStyle="normal"
+            tools:ignore="RelativeOverlap" />-->
+
+        <ImageButton
+            android:id="@+id/ib_search"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/search_icon"
+            android:contentDescription="@string/app_name" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/actv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textColorHint="@android:color/darker_gray"
+            android:textColor="@android:color/white"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:hint="Search product here..."
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</androidx.appcompat.widget.Toolbar>

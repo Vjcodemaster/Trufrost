@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#676767</color>
+    <color name="colorAccent">#33abdd</color>
+
+    <color name="colorLightGrey">#AEB6BF</color>
+    <color name="transparent">#00000000</color>
+
+    <!--Home Screen Module -->
+    <color name="darkGray">#1D2733</color>
+    <color name="darkBlue">#2F3F58</color>
+    <color name="blueGray">#2f4159</color>
+</resources>
