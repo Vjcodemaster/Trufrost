@@ -3,6 +3,7 @@ package com.autochip.trufrost;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -13,15 +14,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import app_utility.DataBaseHelper;
 import app_utility.DatabaseHandler;
 import app_utility.OnFragmentInteractionListener;
@@ -31,7 +39,7 @@ import app_utility.ProductsRVAdapter;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link app_utility.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SubCategoryFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -59,11 +67,24 @@ public class SubCategoryFragment extends Fragment {
     RecyclerView recyclerViewProducts;
     private ExpandableLayout expandableLayout;
 
+    private ViewPager mViewPager;
+    private TabLayout tabLayout;
+
+    private TabLayout[] tabLayoutsArray;
+    //private View[] tabViews;
+
+    private View previousView;
+
     Button btnPreviousClicked = null;
 
     String sPreviousCategoryname = "";
 
     ArrayList<String> alCategories = new ArrayList<>();
+
+    Stack<Integer> pageHistory;
+    int currentPage;
+    boolean saveToHistory;
+
 
     public SubCategoryFragment() {
         // Required empty public constructor
@@ -113,6 +134,34 @@ public class SubCategoryFragment extends Fragment {
         TextView tvMainMenuName = view.findViewById(R.id.tv_main_menu_name);
         llDynamicParent = view.findViewById(R.id.ll_dynamic_parent);
         expandableLayout = view.findViewById(R.id.expandable_layout);
+
+        mViewPager = view.findViewById(R.id.viewpager_container);
+        pageHistory = new Stack<>();
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (saveToHistory)
+                    pageHistory.push(currentPage);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        saveToHistory = true;
+
+        tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(mViewPager);
+
+
+
         recyclerViewProducts = expandableLayout.findViewById(R.id.rv_products_list);
         LinearLayoutManager mLinearLayoutManager;
 
@@ -164,7 +213,87 @@ public class SubCategoryFragment extends Fragment {
         final String[] sSubCategoryArray = sSubCategory.split("##");
         alSubCategory = new ArrayList<>(Arrays.asList(sSubCategoryArray));
         btnSubCategoryArray = new Button[alSubCategory.size()];
-        for (int i = 0; i < btnSubCategoryArray.length; i++) {
+
+        tabLayoutsArray = new TabLayout[alSubCategory.size()];
+        //tabViews = new View[alSubCategory.size()];
+        for (int i=0; i<alSubCategory.size(); i++){
+            tabLayout.addTab(tabLayout.newTab().setText(alSubCategory.get(i)));
+            tabLayoutsArray[i] = tabLayout;
+            //tabViews[i] = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(i);
+            final int finalI = i;
+            View root = tabLayout.getChildAt(finalI);
+            if (root instanceof LinearLayout) {
+                ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                GradientDrawable drawable = new GradientDrawable();
+                drawable.setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+                drawable.setSize(20, 5);
+                ((LinearLayout) root).setDividerPadding(1);
+                ((LinearLayout) root).setDividerDrawable(drawable);
+            }
+            tabLayoutsArray[i].addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    String sSubCategory = tab.getText().toString().trim();
+                    ProductsRVAdapter productsRVAdapter = new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
+                    recyclerViewProducts.setAdapter(productsRVAdapter);
+                    expandableLayout.expand();
+                    //tabViews[finalI].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_selected, null));
+                    /*for(int i=0; i<tabViews.length; i++){
+                        if(i == finalI){
+                            tabViews[i].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_selected, null));
+                        } else
+                        tabViews[i].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_unselected, null));
+                    }*/
+                    /*if(previousView!=null)
+                        previousView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_unselected, null));
+                    tabViews[finalI].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_selected, null));
+                    previousView = tabViews[finalI];*/
+
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    //tabViews[finalI].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.home_tab_unselected, null));
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+
+            });
+            /*tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+                @Override
+
+                public void onTabSelected(TabLayout.Tab tab) {
+                    mViewPager.setCurrentItem(tab.getPosition());
+
+                    int selectedTabPosition = tab.getPosition(); //tab position
+                    switch (selectedTabPosition) {
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                    }
+                    //}
+                    super.onTabSelected(tab);
+                    //}
+                }
+            });*/
+
+            /*if(i==alSubCategory.size()-1){
+                tabLayout.selectTab(tabLayoutsArray[0].getTabAt(0));
+            }*/
+        }
+        /*SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), alSubCategory.size(), 0);
+        mViewPager.setAdapter(mSectionsPagerAdapter);*/
+       /* for (int i = 0; i < btnSubCategoryArray.length; i++) {
             addDynamicContentsForSubCategory(i, alSubCategory);
             final int finalI = i;
             btnSubCategoryArray[i].setOnClickListener(new View.OnClickListener() {
@@ -172,12 +301,13 @@ public class SubCategoryFragment extends Fragment {
                 public void onClick(View v) {
                     String sSubCategory = btnSubCategoryArray[finalI].getText().toString().trim();
 
-                    /*if (!expandableLayout.isExpanded() && sSubCategory.equals(sPreviousCategoryname) && btnSubCategoryArray[finalI] == btnPreviousClicked) {
+                    *//*if (!expandableLayout.isExpanded() && sSubCategory.equals(sPreviousCategoryname) && btnSubCategoryArray[finalI] == btnPreviousClicked) {
                         Drawable img = getContext().getResources().getDrawable(R.drawable.up_arrow, null);
                         img.setBounds(0, 0, 30, 30);
                         btnSubCategoryArray[finalI].setCompoundDrawables(null, null, img, null);
                         btnSubCategoryArray[finalI].setCompoundDrawablePadding(6);
-                    } else*/ if (btnSubCategoryArray[finalI] == btnPreviousClicked) {
+                    } else*//*
+                    if (btnSubCategoryArray[finalI] == btnPreviousClicked) {
                         expandableLayout.setExpanded(false);
                         //expandableLayout.setVisibility(View.VISIBLE);
                         expandableLayout.collapse();
@@ -203,7 +333,7 @@ public class SubCategoryFragment extends Fragment {
                         btnPreviousClicked = btnSubCategoryArray[finalI];
                         sPreviousCategoryname = sSubCategory;
                     }
-                    /*ProductsRVAdapter productsRVAdapter= new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
+                    *//*ProductsRVAdapter productsRVAdapter= new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
                     recyclerViewProducts.setAdapter(productsRVAdapter);
                     expandableLayout.setVisibility(View.VISIBLE);
                     expandableLayout.expand();
@@ -214,12 +344,12 @@ public class SubCategoryFragment extends Fragment {
                     btnSubCategoryArray[finalI].setCompoundDrawablePadding(6);
                     //openProductsFragment(sCategory[finalI]);
 
-                    btnPreviousClicked = btnSubCategoryArray[finalI];*/
+                    btnPreviousClicked = btnSubCategoryArray[finalI];*//*
                 }
             });
         }
 
-        btnSubCategoryArray[0].callOnClick();
+        btnSubCategoryArray[0].callOnClick();*/
     }
 
 
@@ -281,12 +411,13 @@ public class SubCategoryFragment extends Fragment {
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         expandableLayout.setExpanded(true);
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //expandableLayout.setExpanded(false);
     }
