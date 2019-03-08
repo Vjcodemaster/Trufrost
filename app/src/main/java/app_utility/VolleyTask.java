@@ -206,6 +206,8 @@ public class VolleyTask {
                             sb.append(sSubCategory);
                             sb.append("##");
                             sb.append(sMainCategory);
+                            sb.append("##");
+                            sb.append(jsonArray.getJSONObject(i).get("id"));
                             alProducts = new ArrayList<>();
 
 
@@ -297,7 +299,7 @@ public class VolleyTask {
                                 for (int k = 0; k < alTmp.size(); k++) {
                                     //ArrayList<String> alProducts = (ArrayList<String>) Arrays.asList(alTmp.get(k).split(","));
                                     ArrayList<String> alProducts = new ArrayList<>(Arrays.asList(alTmp.get(k).split("##")));
-                                    dbh.addDataToIndividualProducts(new DataBaseHelper(mainID, alMainMenuKey.get(i), alKeySet.get(j), alProducts.get(0), alProducts.get(2), alProducts.get(1), "", alProducts.get(3), alProducts.get(4)));
+                                    dbh.addDataToIndividualProducts(new DataBaseHelper(mainID, Integer.valueOf(alProducts.get(7)), alMainMenuKey.get(i), alKeySet.get(j), alProducts.get(0), alProducts.get(2), alProducts.get(1), "", alProducts.get(3), alProducts.get(4)));
 
                                     /*if (DataReceiverService.refOfService != null){
                                         String sData = String.valueOf(dbh.lastID()) + "##" + alProducts.get(1);
@@ -327,11 +329,11 @@ public class VolleyTask {
                             }
                         }
                         //ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllProductsData());
-                        ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllProductsData1());
+                        /*ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllProductsData1());
                         ArrayList<String> alProducts = new ArrayList<>();
                         for (int i=0; i<dbData.size(); i++){
                             alProducts.add(dbData.get(i).get_individual_product_names());
-                        }
+                        }*/
                         sendMsgToActivity();
                     } catch (JSONException e) {
                         e.printStackTrace();

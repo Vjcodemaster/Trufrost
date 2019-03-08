@@ -128,7 +128,7 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_individual, container, false);
+        View view = inflater.inflate(R.layout.fragment_individual_e, container, false);
 
 
         initViews(view);

@@ -271,13 +271,20 @@ public class OdooConnect {
                 Map<String, Map<String, Object>> attrRelation =
                         (Map<String, Map<String, Object>>) client.call("execute_kw", param);
 
+                //int count =0;
                 for (String key : keys) {
 
                     if (attrRelation.get(key).containsValue("many2one")) {
-                        List fRelation = asList((Object[]) listFields.get(key));
-                        Object f = (Object) fRelation.get(1); // 1 => name
-                        listFields.put(key, f);
-
+                       //if(count!=1) {
+                        try {
+                            List fRelation = asList((Object[]) listFields.get(key));
+                            Object f = (Object) fRelation.get(1); // 1 => name
+                            listFields.put(key, f);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        //}
+                        //count++;
                     } else if (attrRelation.get(key).containsValue("many2many") ||
                             attrRelation.get(key).containsValue("one2many")) {
                         List fRelation = asList((Object[]) listFields.get(key));

@@ -40,6 +40,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String KEY_MAIN_PRODUCT_ID = "KEY_MAIN_PRODUCT_ID";
 
+    private static final String KEY_ODOO_PRODUCT_ID = "KEY_ODOO_PRODUCT_ID";
+
     private static final String KEY_SUB_PRODUCT_ID = "KEY_SUB_PRODUCT_ID";
 
     private static final String KEY_SUB_PRODUCT_NAME = "KEY_SUB_PRODUCT_NAME";
@@ -124,6 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_INDIVIDUAL_PRODUCTS = "CREATE TABLE " + TABLE_INDIVIDUAL_PRODUCTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_MAIN_PRODUCT_ID + " INTEGER, "
+                + KEY_ODOO_PRODUCT_ID + " INTEGER, "
                 + KEY_MAIN_PRODUCT_NAMES + " TEXT, "
                 + KEY_SUB_PRODUCT_CATEGORY_NAMES + " TEXT, "
                 + KEY_INDIVIDUAL_PRODUCT_NAMES + " TEXT, "
@@ -187,6 +190,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         //values.put(KEY_ID, dataBaseHelper.getID()); // Contact Name
         values.put(KEY_MAIN_PRODUCT_ID, dataBaseHelper.get_main_product_id());
+        values.put(KEY_ODOO_PRODUCT_ID, dataBaseHelper.get_odoo_product_id());
         values.put(KEY_MAIN_PRODUCT_NAMES, dataBaseHelper.get_main_product_names());
         values.put(KEY_SUB_PRODUCT_CATEGORY_NAMES, dataBaseHelper.get_product_category_names()); // Contact Phone
         values.put(KEY_INDIVIDUAL_PRODUCT_NAMES, dataBaseHelper.get_individual_product_names());
@@ -366,8 +370,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         return sName;
     }
-
-
 
     public String getProductTechSpecValue(String sProductName) {
         Cursor cursor;
@@ -591,14 +593,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 DataBaseHelper dataBaseHelper = new DataBaseHelper();
                 dataBaseHelper.set_id(Integer.parseInt(cursor.getString(0)));
                 dataBaseHelper.set_main_product_id(cursor.getInt(1));
-                dataBaseHelper.set_main_product_names(cursor.getString(2));
-                dataBaseHelper.set_product_category_names(cursor.getString(3));
-                dataBaseHelper.set_individual_product_names(cursor.getString(4));
-                dataBaseHelper.set_individual_product_description(cursor.getString(5));
-                dataBaseHelper.set_individual_product_tech_specs_header(cursor.getString(6));
-                dataBaseHelper.set_individual_product_tech_specs_value(cursor.getString(7));
-                dataBaseHelper.set_individual_product_address(cursor.getString(8));
-                dataBaseHelper.set_individual_product_images_path(cursor.getString(9));
+                dataBaseHelper.set_odoo_product_id(cursor.getInt(2));
+                dataBaseHelper.set_main_product_names(cursor.getString(3));
+                dataBaseHelper.set_product_category_names(cursor.getString(4));
+                dataBaseHelper.set_individual_product_names(cursor.getString(5));
+                dataBaseHelper.set_individual_product_description(cursor.getString(6));
+                dataBaseHelper.set_individual_product_tech_specs_header(cursor.getString(7));
+                dataBaseHelper.set_individual_product_tech_specs_value(cursor.getString(8));
+                dataBaseHelper.set_individual_product_address(cursor.getString(9));
+                dataBaseHelper.set_individual_product_images_path(cursor.getString(10));
                 // Adding data to list
                 dataBaseHelperList.add(dataBaseHelper);
             } while (cursor.moveToNext());
@@ -676,22 +679,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return dataBaseHelperList;
     }
 
-    public int updateImagePathIndividualProducts(DataBaseHelper dataBaseHelper, int KEY_ID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        //String column = "last_seen";
-        ContentValues values = new ContentValues();
-        //values.put(KEY_NAME, dataBaseHelper.getName());
-        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
-        values.put(KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH, dataBaseHelper.get_individual_product_images_path());
-
-        // updating row
-        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
-        return db.update(TABLE_INDIVIDUAL_PRODUCTS, values, "_id" + " = " + KEY_ID, null);
-        //*//**//*ContentValues data=new ContentValues();
-        //data.put("Field1","bob");
-        //DB.update(Tablename, data, "_id=" + id, null);*//**//*
-    }
-
     public String getProductTechSpecHeading(int sID) {
         Cursor cursor;
         String sName;
@@ -734,8 +721,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return sName;
     }
 
+    public int updateImagePathIndividualProducts(DataBaseHelper dataBaseHelper, int KEY_ID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String column = "last_seen";
+        ContentValues values = new ContentValues();
+        //values.put(KEY_NAME, dataBaseHelper.getName());
+        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
+        values.put(KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH, dataBaseHelper.get_individual_product_images_path());
 
+        // updating row
+        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
+        return db.update(TABLE_INDIVIDUAL_PRODUCTS, values, "_id" + " = " + KEY_ID, null);
+        //*//**//*ContentValues data=new ContentValues();
+        //data.put("Field1","bob");
+        //DB.update(Tablename, data, "_id=" + id, null);*//**//*
+    }
 
+    public int update(DataBaseHelper dataBaseHelper, int KEY_ODOO_ID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String column = "last_seen";
+        ContentValues values = new ContentValues();
+        //values.put(KEY_NAME, dataBaseHelper.getName());
+        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
+        values.put(KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_HEADER, dataBaseHelper.get_individual_product_tech_specs_header());
+        values.put(KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_VALUE, dataBaseHelper.get_individual_product_tech_specs_value());
+
+        // updating row
+        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
+        return db.update(TABLE_INDIVIDUAL_PRODUCTS, values, "KEY_ODOO_PRODUCT_ID" + " = " + KEY_ODOO_ID, null);
+        //*//**//*ContentValues data=new ContentValues();
+        //data.put("Field1","bob");
+        //DB.update(Tablename, data, "_id=" + id, null);*//**//*
+    }
     /*public List<DataBaseHelper> getAllProductsData() {
         List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
         // Select All Query

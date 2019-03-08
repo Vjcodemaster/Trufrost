@@ -233,6 +233,7 @@ public class SubCategoryFragment extends Fragment {
             tabLayoutsArray[i].addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
+                    expandableLayout.collapse();
                     String sSubCategory = tab.getText().toString().trim();
                     ProductsRVAdapter productsRVAdapter = new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
                     recyclerViewProducts.setAdapter(productsRVAdapter);
@@ -291,6 +292,12 @@ public class SubCategoryFragment extends Fragment {
                 tabLayout.selectTab(tabLayoutsArray[0].getTabAt(0));
             }*/
         }
+        tabLayoutsArray[0].getTabAt(0).select();
+        tabLayoutsArray[0].getTabAt(0).getText();
+        String sSubCategory = tabLayoutsArray[0].getTabAt(0).getText().toString().trim();
+        ProductsRVAdapter productsRVAdapter = new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
+        recyclerViewProducts.setAdapter(productsRVAdapter);
+        expandableLayout.expand();
         /*SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), alSubCategory.size(), 0);
         mViewPager.setAdapter(mSectionsPagerAdapter);*/
        /* for (int i = 0; i < btnSubCategoryArray.length; i++) {

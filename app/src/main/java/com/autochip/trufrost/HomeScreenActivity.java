@@ -49,6 +49,7 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
+import app_utility.TrufrostAsyncTask;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -757,6 +758,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                         }
                     });
                 }
+                TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh);
+                trufrostAsyncTask.execute(String.valueOf(2), "");
                 sharedPreferencesClass.setUserLogStatus(true);
                 break;
             case "UPDATE_SUB_MENU_BUTTONS":
