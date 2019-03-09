@@ -48,7 +48,7 @@ import app_utility.ZoomOutPageTransformer;
  * Use the {@link IndividualFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndividualFragment extends Fragment implements OnFragmentInteractionListener{
+public class IndividualFragment extends Fragment implements OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,7 +86,7 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
     ImageView ivLeftArrow;
     ImageView ivRightArrow;
     ArrayList<String> alImagesPath;
-
+    TableRow trHeading;
 
 
     public IndividualFragment() {
@@ -133,13 +133,13 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
 
         initViews(view);
 
-        getData();
+        getData(inflater);
 
         return view;
     }
 
 
-    private void initViews(View view){
+    private void initViews(View view) {
         tvProductName = view.findViewById(R.id.tv_product_name);
         tvProductName.setText(mParam1);
         tvProductDescription = view.findViewById(R.id.tv_product_description);
@@ -185,11 +185,11 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
         alImagesPath = new ArrayList<>(Arrays.asList(dbh.getImagePathFromProducts(mParam3).split(",")));
         Uri uri = Uri.fromFile(new File(alImagesPath.get(0)));
         ivMainImage.setImageURI(uri);
-        individualProductRVAdapter= new IndividualProductRVAdapter(getActivity(), recyclerViewImages, alImagesPath);
+        individualProductRVAdapter = new IndividualProductRVAdapter(getActivity(), recyclerViewImages, alImagesPath);
         recyclerViewImages.setAdapter(individualProductRVAdapter);
     }
 
-    private void getData(){
+    private void getData(LayoutInflater inflater) {
         ArrayList<DataBaseHelper> arrayList = new ArrayList<>(dbh.getAllMainProducts());
         ArrayList<DataBaseHelper> arrayList1 = new ArrayList<>(dbh.getAllProductsData1());
         alTechHeading = new ArrayList<>(Arrays.asList(dbh.getProductTechSpecHeading(mParam3).split(",")));
@@ -199,15 +199,48 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
         tvTechSpecsValues = new TextView[alTechValues.size()];
 
         tvTechSpecsValues = new TextView[alTechValues.size()];
+
+        trHeading = (TableRow) inflater.inflate(R.layout.table_row, null);
         for (int i = 0; i < alTechHeading.size(); i++) {
-            addDynamicTextViewTechSpecsHeading(i);
-            addDynamicTextViewTechSpecsValues(i);
+            //addDynamicTextViewTechSpecsHeading(i);
+            //addDynamicTextViewTechSpecsValues(i);
+            addDynamicTextViewTechSpecs(i, inflater);
         }
+        //tlTechnicalSpecs.addView(trHeading, 0);
+    }
+
+    private void addDynamicTextViewTechSpecs(int i, LayoutInflater inflater) {
+        TableRow row = (TableRow) inflater.inflate(R.layout.table_row, null);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+        params.setMargins(1, 2, 1, 2);
+        params.gravity = Gravity.CENTER;
+
+        TextView tvKey = row.findViewById(R.id.tv_key);
+        tvKey.setText(alTechHeading.get(i));
+        /*tvKey.setLayoutParams(params);
+        tvKey.setPadding(4, 0, 4, 0);*/
+        //tvKey.setTextColor(getActivity().getResources().getColor(android.R.color.white));
+        //tvKey.setBackgroundColor(getActivity().getResources().getColor(R.color.colorAccent));
+
+        TextView tvValue = row.findViewById(R.id.tv_value);
+        try {
+            if (alTechHeading.get(i) != null)
+                tvValue.setText(alTechValues.get(i));
+        } catch (Exception e) {
+            e.printStackTrace();
+            tlTechnicalSpecs.addView(row);
+        }
+        /* tvValue.setLayoutParams(params);*/
+        //tvValue.setTextColor(getActivity().getResources().getColor(R.color.darkBlue));
+        //tvValue.setBackgroundColor(getActivity().getResources().getColor(android.R.color.white));
+
+        //row.addView(tvKey);
+        //row.addView(tvValue);
+        tlTechnicalSpecs.addView(row);
 
     }
 
     private void addDynamicTextViewTechSpecsHeading(int i) {
-
         TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
         params.setMargins(1, 2, 1, 2);
         params.gravity = Gravity.CENTER;
@@ -336,10 +369,10 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
         if (position == 0 && mViewPagerSlideShow.getAdapter().getCount() == 1) {
             ivLeftArrow.setVisibility(View.GONE);
             ivRightArrow.setVisibility(View.GONE);
-        } else if(position == 0 && mViewPagerSlideShow.getAdapter().getCount() > 1){
+        } else if (position == 0 && mViewPagerSlideShow.getAdapter().getCount() > 1) {
             ivLeftArrow.setVisibility(View.GONE);
             ivRightArrow.setVisibility(View.VISIBLE);
-        }else if (position == alImagesPath.size() - 1) {
+        } else if (position == alImagesPath.size() - 1) {
             ivRightArrow.setVisibility(View.GONE);
             ivLeftArrow.setVisibility(View.VISIBLE);
         } else {
@@ -367,7 +400,7 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
 
     @Override
     public void onFragmentMessage(String sMsg, int type, String sResults, String sResult) {
-        switch (sMsg){
+        switch (sMsg) {
             case "IMAGE_CLICKED":
                 Uri uri = Uri.fromFile(new File(sResult));
                 imagePathPosition = type;
@@ -407,7 +440,7 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
         }
     }
 
-    private Bitmap blurBitmap(Bitmap bitmap){
+    private Bitmap blurBitmap(Bitmap bitmap) {
         RenderScript rs = RenderScript.create(getActivity());
         Allocation input = Allocation.createFromBitmap(rs, bitmap,
                 Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);

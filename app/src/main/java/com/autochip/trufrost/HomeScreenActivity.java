@@ -116,10 +116,10 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         ta.recycle();
         drawableFromTheme = ta.getDrawable(0 *//* index *//*);
          */
-        HashMap<String, String> params = new HashMap<>();
+        /*HashMap<String, String> params = new HashMap<>();
         params.put("db", StaticReferenceClass.DB_NAME); //Trufrost-Testing
         params.put("user", StaticReferenceClass.USER_ID);
-        params.put("password", StaticReferenceClass.PASSWORD);
+        params.put("password", StaticReferenceClass.PASSWORD);*/
         Intent in = new Intent(HomeScreenActivity.this, DataReceiverService.class);
         startService(in);
 
@@ -670,7 +670,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 openIndividualFragment(sResults, sResult, type);
                 break;
             case "UPDATE_HOME_BUTTON":
-                ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllMainProducts());
+                /*ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllMainProducts());
                 alMainProducts = new ArrayList<>();
                 btnMenuOne = new Button[dbData.size()];
                 for (int i = 0; i < btnMenuOne.length; i++) {
@@ -713,7 +713,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                             stub.setVisibility(View.GONE);
                             stubSubMenu.setVisibility(View.VISIBLE);
                             tvMenuName.setText(alMainProducts.get(finalI));
-                            /*switch (sBtnTag) {
+                            *//*switch (sBtnTag) {
                                 case "Commercial Kitchen":
                                     ArrayList<DataBaseHelper> al = new ArrayList<>(dbh.getAllMainProducts());
                                     ArrayList<String> alSubCategory;
@@ -754,12 +754,11 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                                     break;
                                 case "Biomedical":
                                     break;
-                            }*/
+                            }*//*
                         }
                     });
-                }
-                TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh);
-                trufrostAsyncTask.execute(String.valueOf(2), "");
+                }*/
+
                 sharedPreferencesClass.setUserLogStatus(true);
                 break;
             case "UPDATE_SUB_MENU_BUTTONS":

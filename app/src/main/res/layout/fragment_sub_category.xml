@@ -43,8 +43,10 @@
                 android:fitsSystemWindows="true"
                 android:paddingBottom="3dp"
                 android:paddingEnd="10dp"
+                android:background="@color/darkBlue"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
+                android:layout_marginTop="5dp"
                 android:theme="@style/AppTheme.AppBarOverlay">
 
                 <!--app:tabBackground="@drawable/home_tab_color_selector"-->
@@ -59,6 +61,7 @@
                     app:tabIndicatorColor="@color/orangered"
                     app:tabMaxWidth="0dp"
                     app:tabMinWidth="80dp"
+                    android:background="@color/darkBlue"
                     app:tabMode="scrollable"
                     app:tabPaddingEnd="15dp"
                     app:tabPaddingStart="15dp"

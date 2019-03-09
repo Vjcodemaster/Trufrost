@@ -73,6 +73,8 @@ public class SubCategoryFragment extends Fragment {
     private TabLayout[] tabLayoutsArray;
     //private View[] tabViews;
 
+    private TabLayout.Tab selectedTab;
+    private int selectedTabIndex;
     private View previousView;
 
     Button btnPreviousClicked = null;
@@ -225,7 +227,7 @@ public class SubCategoryFragment extends Fragment {
             if (root instanceof LinearLayout) {
                 ((LinearLayout) root).setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
                 GradientDrawable drawable = new GradientDrawable();
-                drawable.setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null));
+                drawable.setColor(ResourcesCompat.getColor(getResources(), R.color.darkBlue, null));
                 drawable.setSize(20, 5);
                 ((LinearLayout) root).setDividerPadding(1);
                 ((LinearLayout) root).setDividerDrawable(drawable);
@@ -233,6 +235,8 @@ public class SubCategoryFragment extends Fragment {
             tabLayoutsArray[i].addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
+                    selectedTab = tab;
+                    selectedTabIndex = finalI;
                     expandableLayout.collapse();
                     String sSubCategory = tab.getText().toString().trim();
                     ProductsRVAdapter productsRVAdapter = new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
@@ -420,12 +424,19 @@ public class SubCategoryFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        expandableLayout.setExpanded(true);
+
+        //expandableLayout.setExpanded(true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //tabLayoutsArray[0].getTabAt(0).select();
+        //tabLayoutsArray[0].getTabAt(0).getText();
+        /*String sSubCategory = tabLayoutsArray[0].getTabAt(1).getText().toString().trim();
+        ProductsRVAdapter productsRVAdapter = new ProductsRVAdapter(getActivity(), recyclerViewProducts, sSubCategory);
+        recyclerViewProducts.setAdapter(productsRVAdapter);
+        expandableLayout.expand();*/
         //expandableLayout.setExpanded(false);
     }
 

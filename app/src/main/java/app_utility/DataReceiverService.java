@@ -72,6 +72,8 @@ public class DataReceiverService extends Service {
     public DataStorage dataStorage;
     ArrayList<String> alImageAddress;
 
+    ArrayList<Integer> alAlreadyRequested = new ArrayList<>();
+
     public DataReceiverService() {
     }
 
@@ -132,15 +134,22 @@ public class DataReceiverService extends Service {
                             }
                             //getBitmapFromURL(sURL, id);
                         }*/
-                        if(dataStorage!=null && dataStorage.alDBIDWithAddress.size()>=1 && TASK_STATUS.equals("NOT_RUNNING")){
+                        if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
                             final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(0).split("##")[0]);
                             String sURL = dataStorage.alDBIDWithAddress.get(0).split("##")[1];
-                            getBitmapFromURL(sURL, id);
-                        } else if(dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
-                                dataStorage.alDBIDWithAddress.size()==0){
+                            if (sURL.equals("null"))
+                                dataStorage.alDBIDWithAddress.remove(0);
+                            else {
+                                TASK_STATUS = "RUNNING";
+                                getBitmapFromURL(sURL, id);
+                            }
+                        } else if (dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
+                                dataStorage.alDBIDWithAddress.size() == 0) {
                             timer.cancel();
                             timer.purge();
                             refOfService.stopSelf();
+                            TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh);
+                            trufrostAsyncTask.execute(String.valueOf(2), "");
                         }/*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
                             timer.cancel();
                             timer.purge();
@@ -347,10 +356,11 @@ public class DataReceiverService extends Service {
     public void getBitmapFromURL(final String src, final int ID) {
         AsyncTask.execute(new Runnable() {
             Bitmap myBitmap;
+
             @Override
             public void run() {
                 try {
-                    TASK_STATUS = "RUNNING";
+                    //TASK_STATUS = "RUNNING";
                     //login(USER_ID, PASSWORD);
                     java.net.URL url = new java.net.URL(src);
                     HttpURLConnection connection = (HttpURLConnection) url
@@ -367,16 +377,16 @@ public class DataReceiverService extends Service {
                     dataStorage.alDBIDWithPath.add(sIDWithPath);
                     dataStorage.alDBIDWithAddress.remove(0);
                     String sOldImagePath = dbh.getImagePathFromProducts(ID);
-                    if(sOldImagePath!=null && sOldImagePath.length()>2){
+                    if (sOldImagePath != null && sOldImagePath.length() > 2) {
                         String sTmp = sOldImagePath + "," + imagePath;
                         dbh.updateImagePathIndividualProducts(new DataBaseHelper(sTmp), ID);
                     } else
-                    dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
+                        dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
                     TASK_STATUS = "NOT_RUNNING";
 
                 } catch (Exception e) { // catch (IOException e) {
                     e.printStackTrace();
-                    if(src.equals("null"))
+                    if (src.equals("null"))
                         dataStorage.alDBIDWithAddress.remove(0);
                     TASK_STATUS = "NOT_RUNNING";
                     //return null;
@@ -409,9 +419,9 @@ public class DataReceiverService extends Service {
         String savedImagePath = null;
 
         Date d = new Date();
-        CharSequence s  = DateFormat.format("MM-dd-yy hh-mm-ss", d.getTime());
+        CharSequence s = DateFormat.format("MM-dd-yy hh-mm-ss", d.getTime());
         String imageFileName = "IMG" + s + ".jpg";
-        File storageDir = new File(            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 + "/Kiosk");
         boolean success = true;
         if (!storageDir.exists()) {
