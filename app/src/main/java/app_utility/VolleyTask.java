@@ -437,6 +437,7 @@ public class VolleyTask {
     private void sendMsgToActivity() {
         try {
             HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("UPDATE_HOME_BUTTON", 0, "", "");
+            //DataReceiverService.onServiceInterfaceListener.onServiceMessage("START_TECH");
             //onServiceInterface.onServiceCall("RFID", ERROR_CODE, String.valueOf(this.jsonObject.get("rfids")), msg, alID, alData);
         } catch (Exception e1) {
             e1.printStackTrace();

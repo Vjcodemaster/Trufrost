@@ -35,12 +35,14 @@ import androidx.core.app.NotificationCompat;
 import static android.content.ContentValues.TAG;
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
 
-public class DataReceiverService extends Service {
+public class DataReceiverService extends Service implements OnServiceInterfaceListener{
 
     String channelId = "app_utility.DataReceiverService";
     String channelName = "data_sync";
 
     public static DataReceiverService refOfService;
+
+    public static OnServiceInterfaceListener onServiceInterfaceListener;
     /*startService(new Intent(MyService.ServiceIntent));
     stopService(new Intent((MyService.ServiceIntent));*/
 
@@ -58,11 +60,6 @@ public class DataReceiverService extends Service {
     public String VOLLEY_STATUS = "NOT_RUNNING";
     public boolean isMultipleImages = false;
 
-    long startTime = 0;
-    long endTime = 0;
-    long totalTime = 0;
-
-    int index = 0;
 
     String TASK_STATUS = "NOT_RUNNING";
 
@@ -98,11 +95,13 @@ public class DataReceiverService extends Service {
         }
 
         refOfService = this;
+        onServiceInterfaceListener = this;
         dataStorage = new DataStorage();
         //onAsyncInterfaceListener = this;
 
         alImageAddress = new ArrayList<>();
         dbh = new DatabaseHandler(getApplicationContext());
+
         //sharedPreferencesClass = new SharedPreferencesClass(getApplicationContext());
         /*TimerTask doMultipleAsynchronousTask = new TimerTask() {
             @Override
@@ -115,6 +114,7 @@ public class DataReceiverService extends Service {
             }
 
         };
+
         //Starts after 20 sec and will repeat on every 20 sec of time interval.
         timer.schedule(doMultipleAsynchronousTask, 0, 5000);*/
         TimerTask doAsynchronousTask = new TimerTask() {
@@ -134,6 +134,7 @@ public class DataReceiverService extends Service {
                             }
                             //getBitmapFromURL(sURL, id);
                         }*/
+
                         if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
                             final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(0).split("##")[0]);
                             String sURL = dataStorage.alDBIDWithAddress.get(0).split("##")[1];
@@ -147,7 +148,6 @@ public class DataReceiverService extends Service {
                                 dataStorage.alDBIDWithAddress.size() == 0) {
                             timer.cancel();
                             timer.purge();
-                            refOfService.stopSelf();
                             TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh);
                             trufrostAsyncTask.execute(String.valueOf(2), "");
                         }/*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
@@ -502,6 +502,15 @@ public class DataReceiverService extends Service {
         }*/
 
         Log.i(TAG, "Service destroyed ...");
+    }
+
+    @Override
+    public void onServiceMessage(String sMSG) {
+        switch (sMSG){
+            case "TASK_OVER":
+                refOfService.stopSelf();
+                break;
+        }
     }
 
     public class DataStorage {

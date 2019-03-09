@@ -224,11 +224,17 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
 
         TextView tvValue = row.findViewById(R.id.tv_value);
         try {
-            if (alTechHeading.get(i) != null)
+            if (alTechHeading.get(i) != null) {
                 tvValue.setText(alTechValues.get(i));
+                tlTechnicalSpecs.addView(row);
+            }
+            /*else {
+                tvValue.setText("");
+
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
-            tlTechnicalSpecs.addView(row);
+            //tlTechnicalSpecs.addView(row);
         }
         /* tvValue.setLayoutParams(params);*/
         //tvValue.setTextColor(getActivity().getResources().getColor(R.color.darkBlue));
@@ -236,7 +242,7 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
 
         //row.addView(tvKey);
         //row.addView(tvValue);
-        tlTechnicalSpecs.addView(row);
+
 
     }
 

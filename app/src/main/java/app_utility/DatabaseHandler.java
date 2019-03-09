@@ -753,6 +753,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //data.put("Field1","bob");
         //DB.update(Tablename, data, "_id=" + id, null);*//**//*
     }
+
+    public List<Integer> getProductsOdooID() {
+        List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
+        ArrayList<Integer> alODooID = new ArrayList<>();
+        // Select All Query
+        //String selectQuery = "SELECT  * FROM " + TABLE_INDIVIDUAL_PRODUCTS;
+        String selectQuery = "SELECT " + KEY_ID + "," + KEY_ODOO_PRODUCT_ID + "," + KEY_INDIVIDUAL_PRODUCT_ADDRESS +" FROM " + TABLE_INDIVIDUAL_PRODUCTS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                DataBaseHelper dataBaseHelper = new DataBaseHelper();
+                dataBaseHelper.set_id(Integer.parseInt(cursor.getString(0)));
+                dataBaseHelper.set_odoo_product_id(cursor.getInt(1));
+                dataBaseHelper.set_individual_product_address(cursor.getString(2));
+                // Adding data to list
+                dataBaseHelperList.add(dataBaseHelper);
+                //String s = String.valueOf(dataBaseHelperList.get(cursor.getPosition()).get_individual_product_names());
+                int id = dataBaseHelperList.get(cursor.getPosition()).get_odoo_product_id();
+                alODooID.add(id);
+            } while (cursor.moveToNext());
+        }
+
+
+        // return recent list
+        return alODooID;
+    }
     /*public List<DataBaseHelper> getAllProductsData() {
         List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
         // Select All Query

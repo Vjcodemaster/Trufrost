@@ -83,7 +83,14 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
                 loginTask();
                 break;
             case 2:
-                validateLogin();
+                ArrayList<Integer> alOdooID = new ArrayList<>(dbh.getProductsOdooID());
+
+                Integer[] nOdooIDArray = new Integer[alOdooID.size()];
+                alOdooID.toArray(nOdooIDArray);
+
+                //String[] namesArr = (String[]) alOdooID.toArray(new String[alOdooID.size()]);
+
+                validateLogin(nOdooIDArray);
                 //getData();
                 //updateTask();
                 break;
@@ -96,8 +103,8 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
                 //readProducts();
                 break;
             case 5:
-                sStallName = params[1];
-                validateLogin();
+                //sStallName = params[1];
+                //validateLogin();
                 break;
             case 6:
                 break;
@@ -155,7 +162,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         //return isConnected;
     }
 
-    private void validateLogin() {
+    private void validateLogin(Integer[] nOdooIDArray) {
         //240
         try {
             OdooConnect oc = OdooConnect.connect(SERVER_URL, PORT_NO, DB_NAME, USER_ID, PASSWORD);
@@ -168,7 +175,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
             //ids
             Object[] conditions1 = new Object[1];
             //conditions[0] = new Object[]{"id", "!=", "0099009"};
-            conditions1[0] = new Object[]{"id", "!=", 0};
+            conditions1[0] = new Object[]{"id", "=", nOdooIDArray};
             //conditions1[1] = new Object[]{"id", "=", 304};
 
             String[] fields = new String[103];
@@ -348,6 +355,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        DataReceiverService.onServiceInterfaceListener.onServiceMessage("TASK_OVER");
     }
 
     public String loadJSONFromAsset() {
