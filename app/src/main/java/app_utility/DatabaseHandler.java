@@ -61,7 +61,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_PRODUCT_CATEGORY_IMAGES_PATH = "KEY_PRODUCT_CATEGORY_IMAGES_PATH";
 
     private static final String KEY_INDIVIDUAL_PRODUCT_NAMES = "KEY_INDIVIDUAL_PRODUCT_NAMES";
-    
+
     private static final String KEY_INDIVIDUAL_PRODUCT_DESCRIPTION = "KEY_INDIVIDUAL_PRODUCT_DESCRIPTION";
 
     private static final String KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_HEADER = "KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_HEADER";
@@ -789,6 +789,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return recent list
         return alODooID;
     }
+
+
     /*public List<DataBaseHelper> getAllProductsData() {
         List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
         // Select All Query

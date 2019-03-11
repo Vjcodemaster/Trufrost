@@ -31,6 +31,10 @@ public class DataBaseHelper {
 
     }
 
+    public DataBaseHelper(String _product_category_names, int nCase) {
+        this._product_category_names = _product_category_names;
+    }
+
     public DataBaseHelper(String _individual_product_images_path) {
         this._individual_product_images_path = _individual_product_images_path;
     }

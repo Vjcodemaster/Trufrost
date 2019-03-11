@@ -160,7 +160,10 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 int nProductID = Integer.valueOf(tvID.getText().toString().trim());
                 //int n = alProductNames.indexOf(itemAtPosition);
                 //openDisplayIndividualFragment(itemAtPosition, dbh.getDescriptionFromProductName(itemAtPosition), n);
-                openIndividualFragment(itemAtPosition, alDescription.get(nProductID-1), nProductID);
+                if(nProductID==-1){
+                    nProductID=1;
+                }
+                openIndividualFragment(itemAtPosition, alDescription.get(nProductID), nProductID);
                 ibSearch.setVisibility(View.VISIBLE);
                 actvSearch.setText("");
                 hideKeyboardFrom(actvSearch);
@@ -848,7 +851,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             TextView tvName = convertView.findViewById(R.id.tv_actv_name);
             tvName.setText(filteredList.get(position));
             TextView tvID = convertView.findViewById(R.id.tv_actv_id);
-            tvID.setText(String.valueOf(alProductsDBID.get(position)));
+            tvID.setText(String.valueOf(alProductsDBID.get(position+1)));
             return convertView;
         }
         /*@Override

@@ -51,6 +51,8 @@ public class VolleyTask {
     private HashMap<Integer, String> hmImageAddressWithDBID = new HashMap<>();
 
     private LinkedHashMap<String, HashMap<String, ArrayList<String>>> lhm = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, String> lhmTags = new LinkedHashMap<>();
     int stockFlag;
     String URL;
     JSONObject jsonObject = new JSONObject();
@@ -209,9 +211,11 @@ public class VolleyTask {
                             sb.append("##");
                             sb.append(jsonArray.getJSONObject(i).get("id"));
                             sb.append("##");
-                            sb.append(jsonArray.getJSONObject(i).get("tags"));
+                            String sTag = jsonArray.getJSONObject(i).getString("tags");
+                            sb.append(sTag);
                             alProducts = new ArrayList<>();
 
+                            lhmTags.put(sSubCategory, sTag);
 
                             /*if (lhm.get(sMainCategory) != null) {
                                 hm = new HashMap<>(Objects.requireNonNull(lhm.get(sMainCategory)));
@@ -229,22 +233,23 @@ public class VolleyTask {
                                 lhm.put(sMainCategory, hm);
                             }
                         }*/
-                            if(lhm.get(sMainCategory)==null){
+                            if (lhm.get(sMainCategory) == null) {
                                 hm = new HashMap<>();
                                 alProducts.add(sb.toString());
                                 hm.put(sSubCategory, alProducts);
                                 lhm.put(sMainCategory, hm);
-                            } else if(lhm.get(sMainCategory)!=null){
+                            } else if (lhm.get(sMainCategory) != null) {
                                 HashMap<String, ArrayList<String>> hmTmp = new HashMap<>(lhm.get(sMainCategory));
                                 /*if(hmTmp.get(sSubCategory)==null){
                                     hm = new HashMap<>();
                                     alProducts.add(sb.toString());
                                     hm.put(sSubCategory, alProducts);
                                     lhm.put(sMainCategory, hm);
-                                } else*/{
+                                } else*/
+                                {
                                     ArrayList<String> altmp;
                                     hm = new HashMap<>(lhm.get(sMainCategory));
-                                    if (hm.get(sSubCategory)!=null){
+                                    if (hm.get(sSubCategory) != null) {
                                         altmp = new ArrayList<>(hm.get(sSubCategory));
                                         altmp.add(sb.toString());
                                         hm.put(sSubCategory, altmp);
@@ -290,46 +295,81 @@ public class VolleyTask {
 
                         for (int i = 0; i < alMainMenuKey.size(); i++) {
                             hm = new HashMap<>(Objects.requireNonNull(lhm.get(alMainMenuKey.get(i))));//lhm.get(alMainMenuKey.get(i));
-
                             ArrayList<String> alKeySet = new ArrayList<>(hm.keySet());
+                            ArrayList<String> alKey = new ArrayList<>(lhmTags.keySet());
+                            for (int k = 0; k < alKey.size(); k++) {
+                                String[] saMainMenu = lhmTags.get(alKey.get(k)).split(",");
+                                //String sSubCategory = "##" + android.text.TextUtils.join("##", saMainMenu);
+                                String sSubCategory = alKey.get(k);
+                                for(int j=0; j<saMainMenu.length; j++) {
+                                    //String sPreviouslyAdded = dbh.getSubCategoryFromMainDB(saMainMenu[j]);
+                                    String sb;
+                                    //sb.append(sPreviouslyAdded);
+                                    sb = sSubCategory;
+                                    if(!alKeySet.contains(sb) && saMainMenu[j].equals(alMainMenuKey.get(i)))
+                                    alKeySet.add(sb);
+                                    //dbh.updateSubCategoryMainDB(new DataBaseHelper(sb.toString()), saMainMenu[j]);
+                                }
+                            }
                             String sSubCategory = android.text.TextUtils.join("##", alKeySet);
                             dbh.addDataToMainProducts(new DataBaseHelper(alMainMenuKey.get(i), switchDescription(alMainMenuKey.get(i)), sSubCategory));
                             int mainID = dbh.getIdForStringTablePermanent(alMainMenuKey.get(i));
                             for (int j = 0; j < alKeySet.size(); j++) {
                                 hm = new HashMap<>(Objects.requireNonNull(lhm.get(alMainMenuKey.get(i))));
-                                ArrayList<String> alTmp = new ArrayList<>(hm.get(alKeySet.get(j)));
-                                for (int k = 0; k < alTmp.size(); k++) {
-                                    //ArrayList<String> alProducts = (ArrayList<String>) Arrays.asList(alTmp.get(k).split(","));
-                                    ArrayList<String> alProducts = new ArrayList<>(Arrays.asList(alTmp.get(k).split("##")));
-                                    dbh.addDataToIndividualProducts(new DataBaseHelper(mainID, Integer.valueOf(alProducts.get(7)), alMainMenuKey.get(i), alKeySet.get(j), alProducts.get(0), alProducts.get(2), alProducts.get(1), "", alProducts.get(3), alProducts.get(4), alProducts.get(8)));
+                                try {
+                                    ArrayList<String> alTmp = new ArrayList<>(hm.get(alKeySet.get(j)));
+                                    for (int k = 0; k < alTmp.size(); k++) {
+                                        //ArrayList<String> alProducts = (ArrayList<String>) Arrays.asList(alTmp.get(k).split(","));
+                                        ArrayList<String> alProducts = new ArrayList<>(Arrays.asList(alTmp.get(k).split("##")));
+                                        dbh.addDataToIndividualProducts(new DataBaseHelper(mainID, Integer.valueOf(alProducts.get(7)), alMainMenuKey.get(i), alKeySet.get(j), alProducts.get(0), alProducts.get(2), alProducts.get(1), "", alProducts.get(3), alProducts.get(4), alProducts.get(8)));
 
                                     /*if (DataReceiverService.refOfService != null){
                                         String sData = String.valueOf(dbh.lastID()) + "##" + alProducts.get(1);
                                         DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
                                     }*/
-                                    int id = dbh.getRecordsCount();
-                                    if (DataReceiverService.refOfService != null) {
+                                        int id = dbh.getRecordsCount();
+                                        if (DataReceiverService.refOfService != null) {
 
-                                        String sData = String.valueOf(id) + "##" + alProducts.get(1);
-                                        String[] sSplitData = sData.split("##");
-                                        ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSplitData[1].split(",")));
-                                        if (alMultipleUrl.size() > 1) {
-                                            for (int l = 0; l < alMultipleUrl.size(); l++) {
-                                                String sMultiple = String.valueOf(id) + "##" + alMultipleUrl.get(l);
-                                                DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sMultiple);
+                                            String sData = String.valueOf(id) + "##" + alProducts.get(1);
+                                            String[] sSplitData = sData.split("##");
+                                            ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSplitData[1].split(",")));
+                                            if (alMultipleUrl.size() > 1) {
+                                                for (int l = 0; l < alMultipleUrl.size(); l++) {
+                                                    String sMultiple = String.valueOf(id) + "##" + alMultipleUrl.get(l);
+                                                    DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sMultiple);
+                                                    DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
+                                                }
+                                            } else {
+                                                DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
                                                 DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
                                             }
-                                        } else {
-                                            DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
-                                            DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
                                         }
+                                        //DataReceiverService.refOfService.dataStorage.hmImageAddressWithDBID.put(dbh.lastID(), alProducts.get(1));
+                                        else
+                                            hmImageAddressWithDBID.put(dbh.lastID(), alProducts.get(1));
                                     }
-                                    //DataReceiverService.refOfService.dataStorage.hmImageAddressWithDBID.put(dbh.lastID(), alProducts.get(1));
-                                    else
-                                        hmImageAddressWithDBID.put(dbh.lastID(), alProducts.get(1));
+                                }catch (Exception e){
+                                    e.printStackTrace();
                                 }
                             }
+
                         }
+
+                        /*ArrayList<String> alKey = new ArrayList<>(lhmTags.keySet());
+                        for (int i = 0; i < alKey.size(); i++) {
+                            String[] saMainMenu = lhmTags.get(alKey.get(i)).split(",");
+                            //String sSubCategory = "##" + android.text.TextUtils.join("##", saMainMenu);
+                            String sSubCategory = "##" + alKey.get(i);
+                            for(int j=0; j<saMainMenu.length; j++) {
+                                String id = dbh.getSubCategoryFromMainDBa(saMainMenu[j]);
+                                String sPreviouslyAdded = dbh.getSubCategoryFromMainDB(saMainMenu[j]);
+                                StringBuilder sb = new StringBuilder();
+                                sb.append(sPreviouslyAdded);
+                                sb.append(sSubCategory);
+
+                                dbh.updateSubCategoryMainDB(new DataBaseHelper(sb.toString()), saMainMenu[j]);
+                            }
+                        }*/
                         //ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllProductsData());
                         /*ArrayList<DataBaseHelper> dbData = new ArrayList<>(dbh.getAllProductsData1());
                         ArrayList<String> alProducts = new ArrayList<>();
