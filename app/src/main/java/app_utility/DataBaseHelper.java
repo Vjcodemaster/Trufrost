@@ -24,6 +24,7 @@ public class DataBaseHelper {
     private String _individual_product_address;
     private String _individual_product_tech_specs_header;
     private String _individual_product_tech_specs_value;
+    private String _individual_product_tags;
 
     // Empty constructor
     public DataBaseHelper() {
@@ -59,7 +60,7 @@ public class DataBaseHelper {
 
     public DataBaseHelper(int _main_product_id, int _odoo_product_id, String _main_product_names, String _product_category_names, String _individual_product_names, String _individual_product_description,
                           String _individual_product_address, String _individual_product_images_path, String _individual_product_tech_specs_header,
-                          String _individual_product_tech_specs_value) {
+                          String _individual_product_tech_specs_value, String _individual_product_tags) {
         this._main_product_id = _main_product_id;
         this._odoo_product_id = _odoo_product_id;
         this._main_product_names = _main_product_names;
@@ -71,6 +72,7 @@ public class DataBaseHelper {
         this._individual_product_images_path = _individual_product_images_path;
         this._individual_product_tech_specs_header = _individual_product_tech_specs_header;
         this._individual_product_tech_specs_value = _individual_product_tech_specs_value;
+        this._individual_product_tags = _individual_product_tags;
         //this._individual_product_variant_names = _individual_product_variant_names;
         //this._individual_product_variant_images_path = _individual_product_variant_images_path;
     }
@@ -268,5 +270,14 @@ public class DataBaseHelper {
     // setting emailID
     public void set_odoo_product_id(int odoo_product_id) {
         this._odoo_product_id = odoo_product_id;
+    }
+
+    public String get_individual_product_tags() {
+        return this._individual_product_tags;
+    }
+
+    // setting emailID
+    public void set_individual_product_tags(String individual_product_tags) {
+        this._individual_product_tags = individual_product_tags;
     }
 }

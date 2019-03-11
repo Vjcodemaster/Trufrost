@@ -72,6 +72,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH = "KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH";
 
+    private static final String KEY_INDIVIDUAL_PRODUCT_TAGS = "KEY_INDIVIDUAL_PRODUCT_TAGS";
+
     private static final String KEY_INDIVIDUAL_PRODUCT_VARIANT_NAMES = "KEY_INDIVIDUAL_PRODUCT_VARIANT_NAMES";
 
     private static final String KEY_INDIVIDUAL_PRODUCT_VARIANT_IMAGES = "KEY_INDIVIDUAL_PRODUCT_VARIANT_IMAGES";
@@ -134,7 +136,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_HEADER + " TEXT, "
                 + KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_VALUE + " TEXT, "
                 + KEY_INDIVIDUAL_PRODUCT_ADDRESS + " TEXT, "
-                + KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH + " TEXT)";
+                + KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH + " TEXT, "
+                + KEY_INDIVIDUAL_PRODUCT_TAGS + " TEXT)";
                 //+ KEY_INDIVIDUAL_PRODUCT_VARIANT_NAMES + " TEXT, "
                 //+ KEY_INDIVIDUAL_PRODUCT_VARIANT_IMAGES + " TEXT)";
 
@@ -199,6 +202,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_INDIVIDUAL_PRODUCT_TECH_SPECS_VALUE, dataBaseHelper.get_individual_product_tech_specs_value());
         values.put(KEY_INDIVIDUAL_PRODUCT_ADDRESS, dataBaseHelper.get_individual_product_address());
         values.put(KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH, dataBaseHelper.get_individual_product_images_path());
+        values.put(KEY_INDIVIDUAL_PRODUCT_TAGS, dataBaseHelper.get_individual_product_tags());
         //values.put(KEY_INDIVIDUAL_PRODUCT_VARIANT_NAMES, dataBaseHelper.get_individual_product_variant_names());
         //values.put(KEY_INDIVIDUAL_PRODUCT_VARIANT_IMAGES, dataBaseHelper.get_individual_product_variant_images_path());
 
@@ -602,6 +606,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 dataBaseHelper.set_individual_product_tech_specs_value(cursor.getString(8));
                 dataBaseHelper.set_individual_product_address(cursor.getString(9));
                 dataBaseHelper.set_individual_product_images_path(cursor.getString(10));
+                dataBaseHelper.set_individual_product_tags(cursor.getString(11));
                 // Adding data to list
                 dataBaseHelperList.add(dataBaseHelper);
             } while (cursor.moveToNext());
@@ -616,7 +621,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
         // Select All Query
         //String selectQuery = "SELECT  * FROM " + TABLE_INDIVIDUAL_PRODUCTS;
-        String selectQuery = "SELECT " + KEY_ID + "," + KEY_SUB_PRODUCT_CATEGORY_NAMES + "," + KEY_INDIVIDUAL_PRODUCT_NAMES +" FROM " + TABLE_INDIVIDUAL_PRODUCTS;
+        String selectQuery = "SELECT " + KEY_ID + "," + KEY_SUB_PRODUCT_CATEGORY_NAMES + "," + KEY_INDIVIDUAL_PRODUCT_NAMES +"," + KEY_INDIVIDUAL_PRODUCT_DESCRIPTION+" FROM " + TABLE_INDIVIDUAL_PRODUCTS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -628,6 +633,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 dataBaseHelper.set_id(Integer.parseInt(cursor.getString(0)));
                 dataBaseHelper.set_product_category_names(cursor.getString(1));
                 dataBaseHelper.set_individual_product_names(cursor.getString(2));
+                dataBaseHelper.set_individual_product_description(cursor.getString(3));
                 // Adding data to list
                 dataBaseHelperList.add(dataBaseHelper);
             } while (cursor.moveToNext());

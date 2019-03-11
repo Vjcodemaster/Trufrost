@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -29,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import androidx.annotation.RequiresApi;
@@ -49,7 +50,6 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
-import app_utility.TrufrostAsyncTask;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -96,6 +96,9 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
     ArrayList<String> alProductNames;
     ArrayList<Integer> alProductsDBID;
     ArrayList<String> alSubCategoryNames;
+    ArrayList<String> alDescription;
+
+    private boolean isDataPresent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,8 +156,11 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 itemAtPosition = parent.getItemAtPosition(position).toString().trim();
-                int n = alProductNames.indexOf(itemAtPosition);
+                TextView tvID = view.findViewById(R.id.tv_actv_id);
+                int nProductID = Integer.valueOf(tvID.getText().toString().trim());
+                //int n = alProductNames.indexOf(itemAtPosition);
                 //openDisplayIndividualFragment(itemAtPosition, dbh.getDescriptionFromProductName(itemAtPosition), n);
+                openIndividualFragment(itemAtPosition, alDescription.get(nProductID-1), nProductID);
                 ibSearch.setVisibility(View.VISIBLE);
                 actvSearch.setText("");
                 hideKeyboardFrom(actvSearch);
@@ -169,26 +175,30 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             @Override
             public void onClick(View v) {
                 alDb = new ArrayList<>(dbh.getDataForSearch());
-                alProductsDBID = new ArrayList<>();
-                alSubCategoryNames = new ArrayList<>();
-                alProductNames = new ArrayList<>();
-                for(int i=0; i<alDb.size(); i++){
-                    alProductsDBID.add(alDb.get(i).get_id());
-                    alSubCategoryNames.add(alDb.get(i).get_product_category_names());
-                    alProductNames.add(alDb.get(i).get_individual_product_names());
-                }
+                if(!isDataPresent) {
+                    alProductsDBID = new ArrayList<>();
+                    alSubCategoryNames = new ArrayList<>();
+                    alProductNames = new ArrayList<>();
+                    alDescription = new ArrayList<>();
+                    for (int i = 0; i < alDb.size(); i++) {
+                        alProductsDBID.add(alDb.get(i).get_id());
+                        alSubCategoryNames.add(alDb.get(i).get_product_category_names());
+                        alProductNames.add(alDb.get(i).get_individual_product_names());
+                        alDescription.add(alDb.get(i).get_individual_product_description());
+                    }
 
-                //alProductNames = new ArrayList<>(dbh.getProductNamesOnly());
-                //alProductsDBID = new ArrayList<>(dbh.getProductDBIDOnly());
-                filterAdapter = new FilterAdapter(HomeScreenActivity.this, android.R.layout.simple_dropdown_item_1line, alProductNames);
-                //filterAdapter = new FilterAdapter(HomeScreenActivity.this, R.layout.autocomplete_layout, alProductNames);
+                    //alProductNames = new ArrayList<>(dbh.getProductNamesOnly());
+                    //alProductsDBID = new ArrayList<>(dbh.getProductDBIDOnly());
+                    //filterAdapter = new FilterAdapter(HomeScreenActivity.this, android.R.layout.simple_list_item_1, alProductNames);
+                    filterAdapter = new FilterAdapter(HomeScreenActivity.this, R.layout.actv_custom_view, alProductNames);
                 /*adapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_dropdown_item_1line, alDeliveryOrderNumber);*/
 
-                actvSearch.setAdapter(filterAdapter);
+                    actvSearch.setAdapter(filterAdapter);
+                    isDataPresent = true;
+                }
                 actvSearch.setVisibility(View.VISIBLE);
                 ibSearch.setVisibility(View.GONE);
-
             }
         });
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -811,6 +821,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         ArrayList<String> originalList;
         ArrayList<String> filteredList;
 
+        ArrayList<Integer> alProductsDBID;
+
         public FilterAdapter(Context context, int textViewResourceId, ArrayList<String> item) {
             super(context, textViewResourceId, item);
             filteredList = item;
@@ -827,6 +839,18 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             return filteredList.get(position);
         }
 
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.actv_custom_view, parent, false);
+            }
+            TextView tvName = convertView.findViewById(R.id.tv_actv_name);
+            tvName.setText(filteredList.get(position));
+            TextView tvID = convertView.findViewById(R.id.tv_actv_id);
+            tvID.setText(String.valueOf(alProductsDBID.get(position)));
+            return convertView;
+        }
         /*@Override
         public View getView(int position, View convertView, ViewGroup parent) {
             super.getView(position, convertView, parent);
@@ -887,9 +911,17 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             protected FilterResults performFiltering(CharSequence constraint) {
                 if (constraint != null) {
                     filteredList.clear();
-                    for (String item : originalList) {
+                    alProductsDBID = new ArrayList<>();
+                    /*for (String item : originalList) {
                         if (item.toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredList.add(item);
+                        }
+                    }*/
+                    for (int i=0; i<originalList.size(); i++) {
+                        String item = originalList.get(i);
+                        if (item.toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            filteredList.add(item);
+                            alProductsDBID.add(i);
                         }
                     }
                     FilterResults filterResults = new FilterResults();
@@ -916,7 +948,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 if (results != null && results.count > 0) {
                     notifyDataSetChanged();
                 } else {
-                    filterAdapter = new FilterAdapter(HomeScreenActivity.this, android.R.layout.simple_dropdown_item_1line, originalList);
+                    //filterAdapter = new FilterAdapter(HomeScreenActivity.this, android.R.layout.simple_dropdown_item_1line, originalList);
+                    filterAdapter = new FilterAdapter(HomeScreenActivity.this, R.layout.actv_custom_view, originalList);
                 /*adapter = new ArrayAdapter<>(this,
                         android.R.layout.simple_dropdown_item_1line, alDeliveryOrderNumber);*/
 
