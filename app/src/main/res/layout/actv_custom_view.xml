@@ -2,16 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:background="@color/darkGray"
+    android:orientation="vertical">
+
 
     <TextView
         android:id="@+id/tv_actv_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:textColor="@android:color/white"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
 
     <TextView
         android:id="@+id/tv_actv_id"
         android:layout_width="wrap_content"
+        android:visibility="invisible"
         android:layout_height="wrap_content" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorLightGrey" />
+
+
 </LinearLayout>

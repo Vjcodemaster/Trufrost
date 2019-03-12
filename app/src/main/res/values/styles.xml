@@ -10,7 +10,7 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
-        <item name="android:textColorSecondary">@color/darkBlue</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
     <style name="Widget.MaterialComponents.TabLayout" parent="android:Widget">

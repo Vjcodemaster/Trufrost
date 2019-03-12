@@ -22,7 +22,7 @@
 
             <ImageView
                 android:id="@+id/iv_main_image"
-                android:layout_width="match_parent"
+                android:layout_width="375dp"
                 android:layout_height="275dp"
                 android:layout_marginStart="10dp"
                 android:background="@android:drawable/dialog_holo_dark_frame"
@@ -37,6 +37,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_gravity="center"
             android:orientation="vertical">
 
@@ -45,8 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Name"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:background="@color/colorPrimary"

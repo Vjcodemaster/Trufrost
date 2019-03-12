@@ -643,7 +643,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         //String sBackStackParent = newFragment.getClass().getName();
         transaction = getSupportFragmentManager().beginTransaction();
         //transaction.setCustomAnimations(R.anim.t2b, R.anim.b2t);
-        transaction.replace(R.id.fl_container, newFragment, null);
+        transaction.add(R.id.fl_container, newFragment, null);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -824,7 +824,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         ArrayList<String> originalList;
         ArrayList<String> filteredList;
 
-        ArrayList<Integer> alProductsDBID;
+        ArrayList<Integer> alProductsDBID = new ArrayList<>();
 
         public FilterAdapter(Context context, int textViewResourceId, ArrayList<String> item) {
             super(context, textViewResourceId, item);
@@ -848,10 +848,13 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.actv_custom_view, parent, false);
             }
-            TextView tvName = convertView.findViewById(R.id.tv_actv_name);
-            tvName.setText(filteredList.get(position));
-            TextView tvID = convertView.findViewById(R.id.tv_actv_id);
-            tvID.setText(String.valueOf(alProductsDBID.get(position+1)));
+            if(filteredList.size()>=1 && position < filteredList.size() && alProductsDBID.size()>=1 && position < alProductsDBID.size()) {
+                TextView tvName = convertView.findViewById(R.id.tv_actv_name);
+                tvName.setText(filteredList.get(position));
+                TextView tvID = convertView.findViewById(R.id.tv_actv_id);
+                if (alProductsDBID != null)
+                    tvID.setText(String.valueOf(alProductsDBID.get(position) + 1));
+            }
             return convertView;
         }
         /*@Override
