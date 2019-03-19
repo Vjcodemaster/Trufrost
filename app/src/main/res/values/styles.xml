@@ -16,6 +16,6 @@
     <style name="Widget.MaterialComponents.TabLayout" parent="android:Widget">
         <item name="tabBackground">@drawable/tab_background</item>
         <item name="tabIndicatorColor">#ff00ff</item>
-        <item name="tabIndicatorHeight">2dp</item>
+        <!--<item name="tabIndicatorHeight">2dp</item>-->
     </style>
 </resources>

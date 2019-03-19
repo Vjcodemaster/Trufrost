@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static app_utility.DataReceiverService.onServiceInterfaceListener;
 import static app_utility.StaticReferenceClass.DB_NAME;
 import static app_utility.StaticReferenceClass.NETWORK_ERROR_CODE;
 import static app_utility.StaticReferenceClass.PASSWORD;
@@ -39,10 +40,14 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
 
     ArrayList<DataBaseHelper> alDBTemporaryData;
     DatabaseHandler dbh;
+    Integer[] nOdooIDArray;
 
-    public TrufrostAsyncTask(Context context, DatabaseHandler dbh) {
+    ArrayList<Integer> alIDFetched;
+
+    public TrufrostAsyncTask(Context context, DatabaseHandler dbh, Integer[] nOdooIDArray) {
         this.context = context;
         this.dbh = dbh;
+        this.nOdooIDArray = nOdooIDArray;
     }
 
     public TrufrostAsyncTask(Context context, ArrayList<DataBaseHelper> alDBTemporaryData, DatabaseHandler dbh) {
@@ -83,10 +88,23 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
                 loginTask();
                 break;
             case 2:
-                ArrayList<Integer> alOdooID = new ArrayList<>(dbh.getProductsOdooID());
+               /* ArrayList<Integer> alOdooID = new ArrayList<>(dbh.getProductsOdooID());
 
-                Integer[] nOdooIDArray = new Integer[alOdooID.size()];
-                alOdooID.toArray(nOdooIDArray);
+                Integer[] nOdooIDArray;
+                if(alOdooID.size()>30){
+                    nOdooIDArray = new Integer[30];
+                    for(int i = 0; i < 30; i++) {
+                        nOdooIDArray[i] = alOdooID.get(i);
+                        alOdooID.remove(i);
+                    }
+                } else {
+                    nOdooIDArray = new Integer[alOdooID.size()];
+                    alOdooID.toArray(nOdooIDArray);
+                }*/
+
+                /*Integer[] nOdooIDArray = new Integer[alOdooID.size()];
+                alOdooID.toArray(nOdooIDArray);*/
+
 
                 //String[] namesArr = (String[]) alOdooID.toArray(new String[alOdooID.size()]);
 
@@ -126,6 +144,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         }
         switch (type) {
             case 2:
+                TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_COMPLETE", alIDFetched);
                 //AdminRegisterService.onAsyncInterfaceListener.onAsyncComplete("ODOO_ID_RETRIEVED", odooID, "");
                 break;
             case 4:
@@ -294,8 +313,12 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
             //List<HashMap<String, Object>> stallData = oc.search_read("product.template", new Object[]{conditions1}, "id", "bowl_capacity_id", "ambient_id");
             List<HashMap<String, Object>> techSpecsData = oc.search_read("product.template", new Object[]{conditions1}, fields);
             JSONObject jsonObject = new JSONObject(loadJSONFromAsset());
+
+            alIDFetched = new ArrayList<>();
+
             for (int i = 0; i < techSpecsData.size(); i++) {
                 int id = Integer.valueOf(techSpecsData.get(i).get("id").toString());
+                alIDFetched.add(id);
                 techSpecsData.get(i).remove("id");
                 ArrayList<Object> alTechSpecsValue = new ArrayList<>(techSpecsData.get(i).values());
                 ArrayList<String> alTechSpecsKey = new ArrayList<>(techSpecsData.get(i).keySet());
@@ -355,7 +378,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        DataReceiverService.onServiceInterfaceListener.onServiceMessage("TASK_OVER");
+        //TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_OVER");
     }
 
     public String loadJSONFromAsset() {

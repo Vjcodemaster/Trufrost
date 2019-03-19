@@ -71,6 +71,9 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
     ArrayList<Integer> alAlreadyRequested = new ArrayList<>();
 
+    private boolean isAlreadyExecuted = false;
+    ArrayList<Integer> alOdooID;
+
     public DataReceiverService() {
     }
 
@@ -148,8 +151,27 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                                 dataStorage.alDBIDWithAddress.size() == 0) {
                             timer.cancel();
                             timer.purge();
-                            TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh);
-                            trufrostAsyncTask.execute(String.valueOf(2), "");
+                           /* if(!isAlreadyExecuted) {
+                                alOdooID = new ArrayList<>(dbh.getProductsOdooID());
+                                isAlreadyExecuted = true;
+                            }
+
+                            Integer[] nOdooIDArray;
+                            if(alOdooID.size()>30){
+                                nOdooIDArray = new Integer[30];
+                                for(int i = 0; i < 30; i++) {
+                                    nOdooIDArray[i] = alOdooID.get(i);
+                                    alOdooID.remove(i);
+                                }
+                            } else {
+                                nOdooIDArray = new Integer[alOdooID.size()];
+                                alOdooID.toArray(nOdooIDArray);
+                                timer.cancel();
+                                timer.purge();
+                            }
+                            TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh, nOdooIDArray);
+                            trufrostAsyncTask.execute(String.valueOf(2), "");*/
+                            //TASK_STATUS = "RUNNING";
                         }/*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
                             timer.cancel();
                             timer.purge();
@@ -367,6 +389,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             .openConnection();
                     connection.setDoInput(true);
                     connection.getPermission();
+                    connection.setConnectTimeout(20000);
+                    connection.setReadTimeout(15000);
                     connection.getResponseMessage();
                     connection.connect();
                     InputStream input = connection.getInputStream();
@@ -505,10 +529,13 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     }
 
     @Override
-    public void onServiceMessage(String sMSG) {
+    public void onServiceMessage(String sMSG, ArrayList<Integer> alIDFetched) {
         switch (sMSG){
             case "TASK_OVER":
                 refOfService.stopSelf();
+                break;
+            case "TASK_COMPLETE":
+                TASK_STATUS = "NOT_RUNNING";
                 break;
         }
     }
