@@ -27,6 +27,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -88,6 +89,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
     SharedPreferencesClass sharedPreferencesClass;
 
     ImageButton ibSearch;
+    ImageView ivMainImage;
     AutoCompleteTextView actvSearch;
     String itemAtPosition = "";
     ArrayList<String> alMainProducts;
@@ -100,6 +102,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
     ArrayList<String> alDescription;
 
     private boolean isDataPresent = false;
+
+    //private boolean isArrowInvisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +134,20 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
 
         //VolleyTask volleyTask = new VolleyTask(getApplicationContext(), params, "REQUEST_PRODUCTS", PRODUCT_URL);
 
-
+        ivMainImage = findViewById(R.id.iv_main_image);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ibSearch = toolbar.findViewById(R.id.ib_search);
         actvSearch = toolbar.findViewById(R.id.actv_search);
         actvSearch.setThreshold(1);
+
+        ivMainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivMainImage.setVisibility(View.GONE);
+                //isArrowInvisible = true;
+            }
+        });
 
         actvSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -161,8 +173,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 int nProductID = Integer.valueOf(tvID.getText().toString().trim());
                 //int n = alProductNames.indexOf(itemAtPosition);
                 //openDisplayIndividualFragment(itemAtPosition, dbh.getDescriptionFromProductName(itemAtPosition), n);
-                if(nProductID==-1){
-                    nProductID=1;
+                if (nProductID == -1) {
+                    nProductID = 1;
                 }
                 openIndividualFragment(itemAtPosition, alDescription.get(nProductID), nProductID);
                 ibSearch.setVisibility(View.VISIBLE);
@@ -179,7 +191,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             @Override
             public void onClick(View v) {
                 alDb = new ArrayList<>(dbh.getDataForSearch());
-                if(!isDataPresent) {
+                if (!isDataPresent) {
                     alProductsDBID = new ArrayList<>();
                     alSubCategoryNames = new ArrayList<>();
                     alProductNames = new ArrayList<>();
@@ -504,9 +516,14 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
     @Override
     public void onBackPressed() {
         int size = getSupportFragmentManager().getBackStackEntryCount();
-        if(size==1)
+        if (size == 0 && ivMainImage.getVisibility() == View.GONE) {
+            ivMainImage.setVisibility(View.VISIBLE);
+        } else if (size == 1) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        super.onBackPressed();
+            super.onBackPressed();
+            //isArrowInvisible = true;
+        } else
+            super.onBackPressed();
     }
 
     /*@Override
@@ -630,6 +647,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         transaction.replace(R.id.fl_container, newFragment, null);
         transaction.addToBackStack(null);
         transaction.commit();
+        //isArrowInvisible = false;
     }
 
     private void openIndividualFragment(String sName, String sDescription, int dbID) {
@@ -647,6 +665,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         transaction.add(R.id.fl_container, newFragment, null);
         transaction.addToBackStack(null);
         transaction.commit();
+        //isArrowInvisible = false;
     }
 
     @Override
@@ -851,7 +870,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.actv_custom_view, parent, false);
             }
-            if(filteredList.size()>=1 && position < filteredList.size() && alProductsDBID.size()>=1 && position < alProductsDBID.size()) {
+            if (filteredList.size() >= 1 && position < filteredList.size() && alProductsDBID.size() >= 1 && position < alProductsDBID.size()) {
                 TextView tvName = convertView.findViewById(R.id.tv_actv_name);
                 tvName.setText(filteredList.get(position));
                 TextView tvID = convertView.findViewById(R.id.tv_actv_id);
@@ -860,6 +879,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
             }
             return convertView;
         }
+
         /*@Override
         public View getView(int position, View convertView, ViewGroup parent) {
             super.getView(position, convertView, parent);
@@ -926,7 +946,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                             filteredList.add(item);
                         }
                     }*/
-                    for (int i=0; i<originalList.size(); i++) {
+                    for (int i = 0; i < originalList.size(); i++) {
                         String item = originalList.get(i);
                         if (item.toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredList.add(item);
