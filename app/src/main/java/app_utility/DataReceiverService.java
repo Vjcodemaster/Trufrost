@@ -35,7 +35,7 @@ import androidx.core.app.NotificationCompat;
 import static android.content.ContentValues.TAG;
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
 
-public class DataReceiverService extends Service implements OnServiceInterfaceListener{
+public class DataReceiverService extends Service implements OnServiceInterfaceListener {
 
     String channelId = "app_utility.DataReceiverService";
     String channelName = "data_sync";
@@ -139,18 +139,30 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                         }*/
 
                         if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
-                            final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(0).split("##")[0]);
-                            String sURL = dataStorage.alDBIDWithAddress.get(0).split("##")[1];
+                            String[] saData = dataStorage.alDBIDWithAddress.get(0).split("##");
+                            final int id = Integer.valueOf(saData[0]);
+                            String sURL = saData[1];
+                            int nSwitchCase;
+                            if (saData.length == 3) {
+                                nSwitchCase = Integer.valueOf(saData[2]);
+                            } else
+                                nSwitchCase = 0;
                             if (sURL.equals("null"))
                                 dataStorage.alDBIDWithAddress.remove(0);
                             else {
                                 TASK_STATUS = "RUNNING";
-                                getBitmapFromURL(sURL, id);
+                                getBitmapFromURL(sURL, id, nSwitchCase);
                             }
                         } else if (dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
                                 dataStorage.alDBIDWithAddress.size() == 0) {
+                            Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
+                            startService(techSpecsIn);
                             timer.cancel();
                             timer.purge();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                refOfService.stopForeground(true);
+                                refOfService.stopSelf();
+                            }
                            /* if(!isAlreadyExecuted) {
                                 alOdooID = new ArrayList<>(dbh.getProductsOdooID());
                                 isAlreadyExecuted = true;
@@ -375,7 +387,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
         return result;
     }*/
-    public void getBitmapFromURL(final String src, final int ID) {
+    public void getBitmapFromURL(final String src, final int ID, final int nSwitchCase) {
         AsyncTask.execute(new Runnable() {
             Bitmap myBitmap;
 
@@ -400,20 +412,31 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                     String sIDWithPath = String.valueOf(ID) + ",," + imagePath;
                     dataStorage.alDBIDWithPath.add(sIDWithPath);
                     dataStorage.alDBIDWithAddress.remove(0);
-                    String sOldImagePath = dbh.getImagePathFromProducts(ID);
-                    if (sOldImagePath != null && sOldImagePath.length() > 2) {
-                        String sTmp = sOldImagePath + "," + imagePath;
-                        dbh.updateImagePathIndividualProducts(new DataBaseHelper(sTmp), ID);
-                    } else
-                        dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
-                    TASK_STATUS = "NOT_RUNNING";
 
+                    //added on 28/03/2019
+                    if (nSwitchCase == 1) {
+                        String sOldImagePath = dbh.getImagePathFromMainDB(ID);
+                        if (sOldImagePath != null && sOldImagePath.length() > 2) {
+                            String sTmp = sOldImagePath + "," + imagePath;
+                            dbh.updateSubCategoryImagePathMainDB(new DataBaseHelper(sTmp, 1, false), ID);
+                        } else {
+                            dbh.updateSubCategoryImagePathMainDB(new DataBaseHelper(imagePath, 1, false), ID);
+                        }
+                    } else {
+                        String sOldImagePath = dbh.getImagePathFromProducts(ID);
+                        if (sOldImagePath != null && sOldImagePath.length() > 2) {
+                            String sTmp = sOldImagePath + "," + imagePath;
+                            dbh.updateImagePathIndividualProducts(new DataBaseHelper(sTmp), ID);
+                        } else {
+                            dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
+                        }
+                    }
+                    TASK_STATUS = "NOT_RUNNING";
                 } catch (Exception e) { // catch (IOException e) {
                     e.printStackTrace();
                     if (src.equals("null"))
                         dataStorage.alDBIDWithAddress.remove(0);
                     TASK_STATUS = "NOT_RUNNING";
-                    //return null;
                 }
                 //TODO your background code
             }
@@ -530,7 +553,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
     @Override
     public void onServiceMessage(String sMSG, ArrayList<Integer> alIDFetched) {
-        switch (sMSG){
+        switch (sMSG) {
             case "TASK_OVER":
                 refOfService.stopSelf();
                 break;

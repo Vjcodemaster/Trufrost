@@ -56,9 +56,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String KEY_SUB_PRODUCT_CATEGORY_NAMES = "KEY_SUB_PRODUCT_CATEGORY_NAMES ";
 
-    private static final String KEY_PRODUCT_CATEGORY_DESCRIPTION = "KEY_PRODUCT_CATEGORY_DESCRIPTION";
+    private static final String KEY_SUB_CATEGORY_IMAGES_LINK = "KEY_SUB_CATEGORY_IMAGES_LINK";
 
-    private static final String KEY_PRODUCT_CATEGORY_IMAGES_PATH = "KEY_PRODUCT_CATEGORY_IMAGES_PATH";
+    private static final String KEY_SUB_CATEGORY_IMAGES_PATH = "KEY_SUB_CATEGORY_IMAGES_PATH";
 
     private static final String KEY_INDIVIDUAL_PRODUCT_NAMES = "KEY_INDIVIDUAL_PRODUCT_NAMES";
 
@@ -114,7 +114,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_MAIN_PRODUCT_NAMES + " TEXT, "
                 + KEY_MAIN_PRODUCT_DESCRIPTION + " TEXT, "
-                + KEY_SUB_PRODUCT_CATEGORY_NAMES + " TEXT)";
+                + KEY_SUB_PRODUCT_CATEGORY_NAMES + " TEXT, "
+                + KEY_SUB_CATEGORY_IMAGES_LINK + " TEXT, "
+                + KEY_SUB_CATEGORY_IMAGES_PATH + " TEXT)";
 
         /*String CREATE_ALL_MAIN_PRODUCTS = "CREATE TABLE " + TABLE_MAIN_PRODUCTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
@@ -176,7 +178,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //values.put(KEY_MAIN_PRODUCT_IMAGES_PATH, dataBaseHelper.get_main_product_images_path());
         values.put(KEY_MAIN_PRODUCT_DESCRIPTION, dataBaseHelper.get_individual_product_description());
         values.put(KEY_SUB_PRODUCT_CATEGORY_NAMES, dataBaseHelper.get_product_category_names());
-        //values.put(KEY_PRODUCT_CATEGORY_DESCRIPTION, dataBaseHelper.get_product_category_description());
+        values.put(KEY_SUB_CATEGORY_IMAGES_LINK, dataBaseHelper.get_sub_category_images_link());
         //values.put(KEY_PRODUCT_CATEGORY_IMAGES_PATH, dataBaseHelper.get_main_product_images_path());
 
         // Inserting Row
@@ -262,6 +264,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 dataBaseHelper.set_main_product_names(cursor.getString(1));
                 dataBaseHelper.set_main_product_description(cursor.getString(2));
                 dataBaseHelper.set_product_category_names(cursor.getString(3));
+                dataBaseHelper.set_sub_category_images_link(cursor.getString(4));
+                dataBaseHelper.set_sub_category_images_path(cursor.getString(5));
                 //dataBaseHelper.set_individual_product_description(cursor.getString(5));
                 //dataBaseHelper.set_individual_product_images_path(cursor.getString(6));
                 // Adding data to list
@@ -428,6 +432,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             sName = cursor.getString(cursor.getColumnIndex(KEY_INDIVIDUAL_PRODUCT_IMAGES_PATH));
+        } else {
+            sName = "";
+        }
+        /*if(sName==null){
+            return "";
+        }*/
+        cursor.close();
+        return sName;
+    }
+
+    public String getImagePathFromMainDB(int sID) {
+        Cursor cursor = null;
+        String sName = "";
+        SQLiteDatabase db = getReadableDatabase();
+        cursor = db.query(TABLE_MAIN_PRODUCTS, new String[]{KEY_SUB_CATEGORY_IMAGES_PATH,
+                }, KEY_ID + "=?",
+                new String[]{String.valueOf(sID)}, null, null, null, null);
+        //cursor = db.rawQuery("SELECT TABLEALL FROM last_seen WHERE _id" +" = "+ID +" ", new String[] {KEY_ID + ""});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            sName = cursor.getString(cursor.getColumnIndex(KEY_SUB_CATEGORY_IMAGES_PATH));
         } else {
             sName = "";
         }
@@ -727,6 +752,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return sName;
     }
 
+    public int updateSubCategoryImagePathMainTable(DataBaseHelper dataBaseHelper, int KEY_ID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String column = "last_seen";
+        ContentValues values = new ContentValues();
+        //values.put(KEY_NAME, dataBaseHelper.getName());
+        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
+        values.put(KEY_SUB_CATEGORY_IMAGES_PATH, dataBaseHelper.get_sub_category_images_path());
+
+        // updating row
+        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
+        return db.update(TABLE_MAIN_PRODUCTS, values, "_id" + " = " + KEY_ID, null);
+        //*//**//*ContentValues data=new ContentValues();
+        //data.put("Field1","bob");
+        //DB.update(Tablename, data, "_id=" + id, null);*//**//*
+    }
+
     public int updateImagePathIndividualProducts(DataBaseHelper dataBaseHelper, int KEY_ID) {
         SQLiteDatabase db = this.getWritableDatabase();
         //String column = "last_seen";
@@ -738,6 +779,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // updating row
         //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
         return db.update(TABLE_INDIVIDUAL_PRODUCTS, values, "_id" + " = " + KEY_ID, null);
+        //*//**//*ContentValues data=new ContentValues();
+        //data.put("Field1","bob");
+        //DB.update(Tablename, data, "_id=" + id, null);*//**//*
+    }
+
+    public int updateSubCategoryImagePathMainDB(DataBaseHelper dataBaseHelper, int KEY_ID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String column = "last_seen";
+        ContentValues values = new ContentValues();
+        //values.put(KEY_NAME, dataBaseHelper.getName());
+        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
+        values.put(KEY_SUB_CATEGORY_IMAGES_PATH, dataBaseHelper.get_sub_category_images_path());
+
+        // updating row
+        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
+        return db.update(TABLE_MAIN_PRODUCTS, values, "_id" + " = " + KEY_ID, null);
         //*//**//*ContentValues data=new ContentValues();
         //data.put("Field1","bob");
         //DB.update(Tablename, data, "_id=" + id, null);*//**//*

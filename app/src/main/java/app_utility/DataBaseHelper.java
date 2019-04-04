@@ -11,7 +11,8 @@ public class DataBaseHelper {
     private String _main_product_description;
     private String _product_category_names;
     private String _product_category_description;
-    private String _product_category_images_path;
+    private String _sub_category_images_link;
+    private String _sub_category_images_path;
 
     private int _main_product_id;
     private int _odoo_product_id;
@@ -51,6 +52,22 @@ public class DataBaseHelper {
         this._product_category_names = _product_category_names;
         //this._product_category_description = _product_category_description;
         //this._product_category_images_path = _product_category_images_path;
+    }
+
+    public DataBaseHelper(String _main_product_names, String _main_product_description, String _product_category_names,
+                          String _sub_category_images_link) {
+        this._main_product_names = _main_product_names;
+        this._main_product_description = _main_product_description;
+        this._product_category_names = _product_category_names;
+        this._sub_category_images_link = _sub_category_images_link;
+    }
+
+    public DataBaseHelper(String _general, int nCase, boolean b) {
+        switch (nCase){
+            case 1:
+                this._sub_category_images_path = _general;
+                break;
+        }
     }
 
     /*public DataBaseHelper(String _main_product_names, String _main_product_images_path, String _product_category_names,
@@ -166,15 +183,21 @@ public class DataBaseHelper {
         this._product_category_description = product_category_description;
     }
 
-    public String get_product_category_images_path() {
-        return this._product_category_images_path;
+    public String get_sub_category_images_link() {
+        return this._sub_category_images_link;
     }
 
-    // setting emailID
-    public void set_product_category_images_path(String product_category_images_path) {
-        this._product_category_images_path = product_category_images_path;
+    public void set_sub_category_images_link(String _sub_category_images_link) {
+        this._sub_category_images_link = _sub_category_images_link;
     }
 
+    public String get_sub_category_images_path() {
+        return this._sub_category_images_path;
+    }
+
+    public void set_sub_category_images_path(String sub_category_images_path) {
+        this._sub_category_images_path = sub_category_images_path;
+    }
 
     public int get_main_product_id() {
         return this._main_product_id;

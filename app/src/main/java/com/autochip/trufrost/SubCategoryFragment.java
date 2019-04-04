@@ -377,6 +377,7 @@ public class SubCategoryFragment extends Fragment {
         } else {
             btnSubCategoryArray[i].setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
         }
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         //params.setMarginStart(5);
         //params.setMarginEnd(5);

@@ -56,6 +56,13 @@
         <item>@string/food_preservation</item>
         <item>@string/bio_medical</item>
     </string-array>
+    
+    <string name="commercial_kitchens_title">Commercial Kitchen</string>
+    <string name="bars_and_pubs_title">Bar &amp; Pubs</string>
+    <string name="cake_and_sweet_shops_title">Cake &amp; Sweet shops</string>
+    <string name="food_retail_title">Food Retail</string>
+    <string name="food_preservation_title">Food Preservation</string>
+    <string name="bio_medical_title">Bio Medical</string>
 
     <!-- related to transition -->
     <string name="viewpager_transition">viewpager_transition</string>
