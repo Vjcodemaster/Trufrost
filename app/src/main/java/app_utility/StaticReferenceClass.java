@@ -16,7 +16,7 @@ public class StaticReferenceClass {
 
     public static final int DEFAULT_ODOO_ID = 989819;
 
-    public static final String DB_NAME = "AC-Trufrost";//"Trufrost-server2";//"Trufrost1402";//"Trufrost-Latest";//"Trufrost1402";//
+    public static final String DB_NAME = "AC-Trufrost-04";//"Trufrost-server2";//"Trufrost1402";//"Trufrost-Latest";//"Trufrost1402";//
 
     public static final String USER_ID = "admin";//"autochipindia505@gmail.com";//"vijay@gmail.com";//"vijay.eh4@gmail.com";//
     public static final String PASSWORD = "autochip@505";//"a";////"auto

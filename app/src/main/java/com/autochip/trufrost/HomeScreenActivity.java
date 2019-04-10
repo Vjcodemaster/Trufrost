@@ -657,7 +657,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         //Bundle bundle = new Bundle();
         //bundle.putInt("index", 0);
         //newFragment = SubCategoryFragment.newInstance(sMainMenuName, "");
-        newFragment = SubCategoryFragment.newInstance(sMainMenuName, "");
+        newFragment = ProductsFragment.newInstance(sMainMenuName, "");
         //newFragment.setArguments(bundle);
 
         //String sBackStackParent = newFragment.getClass().getName();

@@ -1,6 +1,8 @@
 package app_utility;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +65,11 @@ public class ProductsRVAdapter extends RecyclerView.Adapter<ProductsRVAdapter.Pr
 
         holder.tvProductName.setText(alName.get(position));
 
+        /*BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+
+        Bitmap mBitmapSampled = BitmapFactory.decodeFile(alImagePath.get(position).split(",")[0],options);
+        holder.ivProducts.setImageBitmap(mBitmapSampled);*/
         Uri uri = Uri.fromFile(new File(alImagePath.get(position).split(",")[0]));
         holder.ivProducts.setImageURI(uri);
         holder.ivProducts.setOnClickListener(new View.OnClickListener() {

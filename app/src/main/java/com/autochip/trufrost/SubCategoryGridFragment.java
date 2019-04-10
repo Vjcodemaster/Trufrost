@@ -122,9 +122,11 @@ public class SubCategoryGridFragment extends Fragment  {
             }
         }
 
-        if(sSubCategory!=null && !sSubCategory.equals("") && sSubCategoryImagesPath!=null) {
+        if(sSubCategory!=null) {
             final String[] sSubCategoryArray = sSubCategory.split("##");
             alSubCategoryNames = new ArrayList<>(Arrays.asList(sSubCategoryArray));
+
+            if(sSubCategoryImagesPath!=null)
             alSubCategoryImagePath = new ArrayList<>(Arrays.asList(sSubCategoryImagesPath.split(",")));
 
             SubCategoryImageRVAdapter subCategoryImageRVAdapter = new SubCategoryImageRVAdapter(getActivity(), recyclerView,

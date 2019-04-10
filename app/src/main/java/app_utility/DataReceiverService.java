@@ -147,7 +147,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                                 nSwitchCase = Integer.valueOf(saData[2]);
                             } else
                                 nSwitchCase = 0;
-                            if (sURL.equals("null"))
+                            if (sURL.equals("null") || sURL.equals(""))
                                 dataStorage.alDBIDWithAddress.remove(0);
                             else {
                                 TASK_STATUS = "RUNNING";
