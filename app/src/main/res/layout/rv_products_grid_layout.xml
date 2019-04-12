@@ -19,7 +19,7 @@
         android:id="@+id/tv_product_name"
         android:layout_width="match_parent"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@android:color/white"
+        android:textColor="@color/lb_grey"
         android:gravity="center"
         android:layout_height="wrap_content"/>
 

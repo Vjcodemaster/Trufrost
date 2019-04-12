@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +52,6 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
-import app_utility.TechnicalSpecService;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -140,11 +140,14 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         ibSearch = toolbar.findViewById(R.id.ib_search);
         actvSearch = toolbar.findViewById(R.id.actv_search);
         actvSearch.setThreshold(1);
-
+        /*final Drawable upArrow = getResources().getDrawable(R.drawable.arrow_left);
+        upArrow.setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);*/
         ivMainImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ivMainImage.setVisibility(View.GONE);
+                toolbar.setVisibility(View.VISIBLE);
                 //isArrowInvisible = true;
             }
         });
@@ -518,6 +521,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         int size = getSupportFragmentManager().getBackStackEntryCount();
         if (size == 0 && ivMainImage.getVisibility() == View.GONE) {
             ivMainImage.setVisibility(View.VISIBLE);
+            toolbar.setVisibility(View.GONE);
         } else if (size == 1) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             super.onBackPressed();

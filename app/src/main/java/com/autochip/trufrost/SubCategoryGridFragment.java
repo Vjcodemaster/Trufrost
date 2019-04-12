@@ -100,11 +100,11 @@ public class SubCategoryGridFragment extends Fragment  {
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mLinearLayoutManager = new GridLayoutManager(getActivity(), 3);
+            mLinearLayoutManager = new GridLayoutManager(getActivity(), 4);
             mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             // In landscape
         } else {
-            mLinearLayoutManager = new GridLayoutManager(getActivity(), 2);
+            mLinearLayoutManager = new GridLayoutManager(getActivity(), 3);
             mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             // In portrait
         }
