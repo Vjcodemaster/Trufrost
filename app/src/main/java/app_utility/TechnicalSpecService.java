@@ -1,5 +1,6 @@
 package app_utility;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,18 +12,15 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.autochip.trufrost.R;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 
 import static android.content.ContentValues.TAG;
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
-import static app_utility.DataReceiverService.refOfService;
 
 public class TechnicalSpecService extends Service implements OnServiceInterfaceListener {
 
@@ -120,7 +118,6 @@ public class TechnicalSpecService extends Service implements OnServiceInterfaceL
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startForeground() {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), createNotificationChannel());
         Notification notification = notificationBuilder.setOngoing(true)
@@ -132,7 +129,7 @@ public class TechnicalSpecService extends Service implements OnServiceInterfaceL
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @TargetApi(Build.VERSION_CODES.O)
     private String createNotificationChannel() {
         NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);

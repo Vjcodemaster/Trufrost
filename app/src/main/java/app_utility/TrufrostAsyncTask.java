@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static app_utility.DataReceiverService.onServiceInterfaceListener;
 import static app_utility.StaticReferenceClass.DB_NAME;
 import static app_utility.StaticReferenceClass.NETWORK_ERROR_CODE;
 import static app_utility.StaticReferenceClass.PASSWORD;

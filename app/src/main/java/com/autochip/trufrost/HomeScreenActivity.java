@@ -1,13 +1,13 @@
 package com.autochip.trufrost;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,10 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -44,6 +40,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import app_utility.DataBaseHelper;
 import app_utility.DataReceiverService;
 import app_utility.DatabaseHandler;
@@ -52,6 +52,7 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
+import app_utility.TechnicalSpecService;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -436,7 +437,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         return super.onOptionsItemSelected(item);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int PERMISSION_ALL, String permissions[], int[] grantResults) {
         StringBuilder sMSG = new StringBuilder();
@@ -637,6 +638,23 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         transaction.commit();
     }*/
 
+    private void openFirstSubCategoryFragment(String sMainMenuName) {
+        Fragment newFragment;
+        FragmentTransaction transaction;
+        //Bundle bundle = new Bundle();
+        //bundle.putInt("index", 0);
+        //newFragment = SubCategoryFragment.newInstance(sMainMenuName, "");
+        newFragment = FirstSubCategoryFragment.newInstance(sMainMenuName, "");
+        //newFragment.setArguments(bundle);
+
+        //String sBackStackParent = newFragment.getClass().getName();
+        transaction = getSupportFragmentManager().beginTransaction();
+        //transaction.setCustomAnimations(R.anim.t2b, R.anim.b2t);
+        transaction.replace(R.id.fl_container, newFragment, null);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     private void openSubCategoryGridFragment(String sMainMenuName) {
         Fragment newFragment;
         FragmentTransaction transaction;
@@ -672,6 +690,7 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         transaction.commit();
         //isArrowInvisible = false;
     }
+
     private void openIndividualFragment(String sName, String sDescription, int dbID) {
         Fragment newFragment;
         FragmentTransaction transaction;
@@ -704,6 +723,18 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 stubSubMenu.setVisibility(View.VISIBLE);*/
                 //loadMenuDataAndListener(sResult);
                 openSubCategoryGridFragment(sResult);
+                //stub = findViewById(R.id.fragment_menu);
+                /*stub.setLayoutResource(R.layout.sub_menu_layout);
+                inflated = stub.inflate();*/
+                //View inflated = stub.inflate();
+                break;
+            case "OPEN_FIRST_SUB_CATEGORY_FRAGMENT":
+                //openMenuFragment(type);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                /*stub.setVisibility(View.GONE);
+                stubSubMenu.setVisibility(View.VISIBLE);*/
+                //loadMenuDataAndListener(sResult);
+                openFirstSubCategoryFragment(sResult);
                 //stub = findViewById(R.id.fragment_menu);
                 /*stub.setLayoutResource(R.layout.sub_menu_layout);
                 inflated = stub.inflate();*/
@@ -839,8 +870,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 }*/
 
                 sharedPreferencesClass.setUserLogStatus(true);
-                /*Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
-                startService(techSpecsIn);*/
+                Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
+                startService(techSpecsIn);
                 break;
             case "UPDATE_SUB_MENU_BUTTONS":
                 /*ArrayList<DataBaseHelper> dbData1 = new ArrayList<>(dbh.getAllMainProducts());

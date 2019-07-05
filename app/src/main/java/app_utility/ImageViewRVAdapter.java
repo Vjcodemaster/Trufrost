@@ -97,7 +97,8 @@ public class ImageViewRVAdapter extends RecyclerView.Adapter<ImageViewRVAdapter.
                         sMainMenuName = "Bio Medical";
                         break;
                 }
-                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT", position, "", sMainMenuName);
+                //HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT", position, "", sMainMenuName);
+                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_FIRST_SUB_CATEGORY_FRAGMENT", position, "", sMainMenuName);
 
             }
         });

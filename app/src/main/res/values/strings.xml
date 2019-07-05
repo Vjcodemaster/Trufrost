@@ -56,7 +56,7 @@
         <item>@string/food_preservation</item>
         <item>@string/bio_medical</item>
     </string-array>
-    
+
     <string name="commercial_kitchens_title">Commercial Kitchen</string>
     <string name="bars_and_pubs_title">Bar &amp; Pubs</string>
     <string name="cake_and_sweet_shops_title">Cake &amp; Sweet shops</string>

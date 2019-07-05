@@ -1,5 +1,6 @@
 package app_utility;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import static android.content.ContentValues.TAG;
@@ -73,6 +73,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
     private boolean isAlreadyExecuted = false;
     ArrayList<Integer> alOdooID;
+    boolean isTimerStopped = false;
 
     public DataReceiverService() {
     }
@@ -138,7 +139,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             //getBitmapFromURL(sURL, id);
                         }*/
 
-                        if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
+                        downloadImageTask();
+                        /*if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
                             String[] saData = dataStorage.alDBIDWithAddress.get(0).split("##");
                             final int id = Integer.valueOf(saData[0]);
                             String sURL = saData[1];
@@ -155,14 +157,15 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             }
                         } else if (dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
                                 dataStorage.alDBIDWithAddress.size() == 0) {
-                            Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
-                            startService(techSpecsIn);
+                            *//*Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
+                            startService(techSpecsIn);*//*
                             timer.cancel();
                             timer.purge();
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 refOfService.stopForeground(true);
-                                refOfService.stopSelf();
                             }
+                            refOfService.stopSelf();
+                        }*/
                            /* if(!isAlreadyExecuted) {
                                 alOdooID = new ArrayList<>(dbh.getProductsOdooID());
                                 isAlreadyExecuted = true;
@@ -184,150 +187,9 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh, nOdooIDArray);
                             trufrostAsyncTask.execute(String.valueOf(2), "");*/
                             //TASK_STATUS = "RUNNING";
-                        }/*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
+                        /*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
                             timer.cancel();
                             timer.purge();
-                        }*/
-                        /*if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1) {
-                            final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(0).split(",,")[0]);
-                            String sURL = dataStorage.alDBIDWithAddress.get(0).split(",,")[1];
-
-                            Glide.with(getApplicationContext())
-                                    .asBitmap()
-                                    .load(sURL)
-                                    .into(new Target<Bitmap>() {
-                                        @Override
-                                        public void onStart() {
-
-                                        }
-
-                                        @Override
-                                        public void onStop() {
-
-                                        }
-
-                                        @Override
-                                        public void onDestroy() {
-
-                                        }
-
-                                        @Override
-                                        public void onLoadStarted(@Nullable Drawable placeholder) {
-
-                                        }
-
-                                        @Override
-                                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-
-                                        }
-
-                                        @Override
-                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                            String sIDWithPath = String.valueOf(id) + ",," + saveImage(resource);
-                                            dataStorage.alDBIDWithPath.add(sIDWithPath);
-                                            dataStorage.alDBIDWithAddress.remove(0);
-                                        }
-
-                                        @Override
-                                        public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                                        }
-
-                                        @Override
-                                        public void getSize(@NonNull SizeReadyCallback cb) {
-                                            cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                                        }
-
-                                        @Override
-                                        public void removeCallback(@NonNull SizeReadyCallback cb) {
-
-                                        }
-
-                                        @Override
-                                        public void setRequest(@Nullable Request request) {
-
-                                        }
-
-                                        @Nullable
-                                        @Override
-                                        public Request getRequest() {
-                                            return null;
-                                        }
-
-                                    });
-                        } else {
-                            timer.cancel();
-                            timer.purge();
-                        }*/
-                        /*if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1) {
-                            timer.cancel();
-                            timer.purge();
-                            for (int i = 0; i < dataStorage.alDBIDWithAddress.size(); i++) {
-                                final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(i).split(",,")[0]);
-                                String sURL = dataStorage.alDBIDWithAddress.get(i).split(",,")[1];
-                                Glide.with(getApplicationContext())
-                                        .asBitmap()
-                                        .load(sURL)
-                                        .into(new Target<Bitmap>() {
-                                            @Override
-                                            public void onStart() {
-
-                                            }
-
-                                            @Override
-                                            public void onStop() {
-
-                                            }
-
-                                            @Override
-                                            public void onDestroy() {
-
-                                            }
-
-                                            @Override
-                                            public void onLoadStarted(@Nullable Drawable placeholder) {
-
-                                            }
-
-                                            @Override
-                                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-
-                                            }
-
-                                            @Override
-                                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                                String sIDWithPath = String.valueOf(id) + ",," + saveImage(resource);
-                                                dataStorage.alDBIDWithPath.add(sIDWithPath);
-                                            }
-
-                                            @Override
-                                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                                            }
-
-                                            @Override
-                                            public void getSize(@NonNull SizeReadyCallback cb) {
-                                                cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
-                                            }
-
-                                            @Override
-                                            public void removeCallback(@NonNull SizeReadyCallback cb) {
-
-                                            }
-
-                                            @Override
-                                            public void setRequest(@Nullable Request request) {
-
-                                            }
-
-                                            @Nullable
-                                            @Override
-                                            public Request getRequest() {
-                                                return null;
-                                            }
-
-                                        });
-                            }
                         }*/
                     }
                 });
@@ -336,6 +198,40 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
         };
         //Starts after 20 sec and will repeat on every 20 sec of time interval.
         timer.schedule(doAsynchronousTask, 0, 5000);
+    }
+
+    private void downloadImageTask() {
+        if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
+            String[] saData = dataStorage.alDBIDWithAddress.get(0).split("##");
+            final int id = Integer.valueOf(saData[0]);
+            String sURL = saData[1];
+            int nSwitchCase;
+            if (saData.length == 3) {
+                nSwitchCase = Integer.valueOf(saData[2]);
+            } else
+                nSwitchCase = 0;
+            if (sURL.equals("null") || sURL.equals(""))
+                dataStorage.alDBIDWithAddress.remove(0);
+            else {
+                TASK_STATUS = "RUNNING";
+                getBitmapFromURL(sURL, id, nSwitchCase);
+                if (dataStorage.alDBIDWithAddress.size() >= 20) {
+                    timer.cancel();
+                    timer.purge();
+                    isTimerStopped = true;
+                }
+            }
+        } else if (dataStorage != null && dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
+                dataStorage.alDBIDWithAddress.size() == 0) {
+                            /*Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
+                            startService(techSpecsIn);*/
+            timer.cancel();
+            timer.purge();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                refOfService.stopForeground(true);
+            }
+            refOfService.stopSelf();
+        }
     }
 
     /*public String login(String uname, String password)
@@ -432,12 +328,18 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                         }
                     }
                     TASK_STATUS = "NOT_RUNNING";
+                    if (isTimerStopped)
+                        downloadImageTask();
                 } catch (Exception e) { // catch (IOException e) {
                     e.printStackTrace();
                     if (src.equals("null"))
                         dataStorage.alDBIDWithAddress.remove(0);
                     TASK_STATUS = "NOT_RUNNING";
-                }
+                    if (isTimerStopped)
+                        downloadImageTask();
+                } /*finally {
+
+                }*/
                 //TODO your background code
             }
         });
@@ -493,7 +395,6 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startForeground() {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), createNotificationChannel());
         Notification notification = notificationBuilder.setOngoing(true)
@@ -505,7 +406,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @TargetApi(Build.VERSION_CODES.O)
     private String createNotificationChannel() {
         NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);
