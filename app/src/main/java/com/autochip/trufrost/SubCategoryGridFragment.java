@@ -45,7 +45,7 @@ public class SubCategoryGridFragment extends Fragment  {
     private ArrayList<String> alSubCategoryImagePath;
 
     DatabaseHandler dbh;
-    ArrayList<DataBaseHelper> alDBData;
+    ArrayList<DataBaseHelper> alSubCategoryData;
 
     private OnFragmentInteractionListener mListener;
 
@@ -113,16 +113,42 @@ public class SubCategoryGridFragment extends Fragment  {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
-        alDBData = new ArrayList<>(dbh.getAllMainProducts());
-        for (int i = 0; i < alDBData.size(); i++) {
+        alSubCategoryData = new ArrayList<>(dbh.getSubCategoryUsingFirstSC(mParam1));
+
+        ArrayList<String> alSubCategoryNames = new ArrayList<>();
+        ArrayList<String> alSubCategoryImagePath = new ArrayList<>();
+        if(alSubCategoryData.get(0).get_product_category_names()!=null)
+            alSubCategoryNames = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_product_category_names().split("##")));
+
+        if(alSubCategoryData.get(0).get_sub_category_images_path()!=null)
+            alSubCategoryImagePath = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_sub_category_images_path().split("##")));
+        /*alFirstSubCategoryNames.add("Trufrost – Professional Refrigeration Products");
+        alFirstSubCategoryNames.add("Trufrost – Ice Machines");
+        alFirstSubCategoryNames.add("Trufrost – Cold Rooms");
+        alFirstSubCategoryNames.add("Butler – Espresso Coffee Machine");
+        alFirstSubCategoryNames.add("Butler – Commercial Blenders");
+        alFirstSubCategoryNames.add("Butler – Combi Steamers");
+        alFirstSubCategoryNames.add("Butler – Bakery Equipment");
+        alFirstSubCategoryNames.add("Butler – Catering Products");
+        alFirstSubCategoryNames.add("Butler – Induction Systems");*/
+
+
+        //ArrayList<String> alSubCategoryNames = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_product_category_names().split("##")));
+        //ArrayList<String> alSubCategoryImagePath = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_sub_category_images_path().split("##")));
+        if(alSubCategoryNames.size()>0) {
+            SubCategoryImageRVAdapter subCategoryImageRVAdapter = new SubCategoryImageRVAdapter(getActivity(), recyclerView,
+                    alSubCategoryNames, alSubCategoryImagePath);
+            recyclerView.setAdapter(subCategoryImageRVAdapter);
+        }
+        /*for (int i = 0; i < alDBData.size(); i++) {
             if (alDBData.get(i).get_main_product_names().equals(mParam1)) {
                 sSubCategory = alDBData.get(i).get_product_category_names();
                 sSubCategoryImagesPath = alDBData.get(i).get_sub_category_images_path();
                 break;
             }
-        }
+        }*/
 
-        if(sSubCategory!=null) {
+        /*if(sSubCategory!=null) {
             final String[] sSubCategoryArray = sSubCategory.split("##");
             alSubCategoryNames = new ArrayList<>(Arrays.asList(sSubCategoryArray));
 
@@ -132,7 +158,7 @@ public class SubCategoryGridFragment extends Fragment  {
             SubCategoryImageRVAdapter subCategoryImageRVAdapter = new SubCategoryImageRVAdapter(getActivity(), recyclerView,
                     alSubCategoryNames, alSubCategoryImagePath);
             recyclerView.setAdapter(subCategoryImageRVAdapter);
-        }
+        }*/
     }
 
 

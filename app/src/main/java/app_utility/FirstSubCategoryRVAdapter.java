@@ -1,6 +1,7 @@
 package app_utility;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.autochip.trufrost.HomeScreenActivity;
 import com.autochip.trufrost.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCategoryRVAdapter.SubCategoryItemTabHolder> {
@@ -20,11 +22,13 @@ public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCate
     RecyclerView recyclerView;
     Context context;
     ArrayList<String> alFirstSubCategoryNames;
+    ArrayList<String> alFirstSCImagesPath;
 
-    public FirstSubCategoryRVAdapter(Context context, RecyclerView recyclerView,ArrayList<String> alFirstSubCategoryNames){
+    public FirstSubCategoryRVAdapter(Context context, RecyclerView recyclerView,ArrayList<String> alFirstSubCategoryNames, ArrayList<String> alFirstSCImagesPath){
         this.context = context;
         this.recyclerView = recyclerView;
         this.alFirstSubCategoryNames = alFirstSubCategoryNames;
+        this.alFirstSCImagesPath = alFirstSCImagesPath;
     }
 
     @NonNull
@@ -37,20 +41,25 @@ public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCate
 
     @Override
     public void onBindViewHolder(@NonNull final SubCategoryItemTabHolder holder, final int position) {
-        holder.ivCategoryImage.setImageDrawable(context.getResources().getDrawable(R.drawable.commercial_kitchen));
+        //holder.ivCategoryImage.setImageDrawable(context.getResources().getDrawable(R.drawable.commercial_kitchen));
+
         holder.tvCategoryName.setText(alFirstSubCategoryNames.get(position));
+        if(alFirstSCImagesPath!=null && alFirstSCImagesPath.size()>position) {
+            Uri imageUri = Uri.fromFile(new File(alFirstSCImagesPath.get(position)));
+            holder.ivCategoryImage.setImageURI(imageUri);
+        }
 
         holder.ivCategoryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT_NEW", position, "", holder.tvCategoryName.getText().toString());
+                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT", position, "", holder.tvCategoryName.getText().toString());
             }
         });
 
         holder.tvCategoryName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT_NEW", position, "", holder.tvCategoryName.getText().toString());
+                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT", position, "", holder.tvCategoryName.getText().toString());
             }
         });
     }

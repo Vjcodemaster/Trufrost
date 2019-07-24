@@ -190,8 +190,8 @@ public class IndividualFragment extends Fragment implements OnFragmentInteractio
     }
 
     private void getData(LayoutInflater inflater) {
-        ArrayList<DataBaseHelper> arrayList = new ArrayList<>(dbh.getAllMainProducts());
-        ArrayList<DataBaseHelper> arrayList1 = new ArrayList<>(dbh.getAllProductsData1());
+        //ArrayList<DataBaseHelper> arrayList = new ArrayList<>(dbh.getAllMainProducts());
+        //ArrayList<DataBaseHelper> arrayList1 = new ArrayList<>(dbh.getAllProductsData1());
         alTechHeading = new ArrayList<>(Arrays.asList(dbh.getProductTechSpecHeading(mParam3).split(",")));
         alTechValues = new ArrayList<>(Arrays.asList(dbh.getProductTechSpecValue(mParam3).split(",")));
 

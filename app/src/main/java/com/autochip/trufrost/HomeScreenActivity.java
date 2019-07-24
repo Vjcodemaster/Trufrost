@@ -53,6 +53,7 @@ import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
 import app_utility.TechnicalSpecService;
+import app_utility.TrufrostAsyncTask;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -116,6 +117,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         typedValue = new TypedValue();
         getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
 
+        /*TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext());
+        trufrostAsyncTask.execute(String.valueOf(1), "");*/
 
         /*attrs = new int[] { android.R.attr.selectableItemBackground *//* index 0 *//*};
 
@@ -655,13 +658,13 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         transaction.commit();
     }
 
-    private void openSubCategoryGridFragment(String sMainMenuName) {
+    private void openSubCategoryGridFragment(String sFirstSCName) {
         Fragment newFragment;
         FragmentTransaction transaction;
         //Bundle bundle = new Bundle();
         //bundle.putInt("index", 0);
         //newFragment = SubCategoryFragment.newInstance(sMainMenuName, "");
-        newFragment = SubCategoryGridFragment.newInstance(sMainMenuName, "");
+        newFragment = SubCategoryGridFragment.newInstance(sFirstSCName, "");
         //newFragment.setArguments(bundle);
 
         //String sBackStackParent = newFragment.getClass().getName();
@@ -673,13 +676,13 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
         //isArrowInvisible = false;
     }
 
-    private void openSubCategoryFragment(String sMainMenuName) {
+    private void openProductsFragment(String sSubCategoryName) {
         Fragment newFragment;
         FragmentTransaction transaction;
         //Bundle bundle = new Bundle();
         //bundle.putInt("index", 0);
         //newFragment = SubCategoryFragment.newInstance(sMainMenuName, "");
-        newFragment = ProductsFragment.newInstance(sMainMenuName, "");
+        newFragment = ProductsFragment.newInstance(sSubCategoryName, "");
         //newFragment.setArguments(bundle);
 
         //String sBackStackParent = newFragment.getClass().getName();
@@ -740,13 +743,13 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 inflated = stub.inflate();*/
                 //View inflated = stub.inflate();
                 break;
-            case "OPEN_SUB_CATEGORY_FRAGMENT_NEW":
+            case "OPEN_PRODUCTS_FRAGMENT":
                 //openMenuFragment(type);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 /*stub.setVisibility(View.GONE);
                 stubSubMenu.setVisibility(View.VISIBLE);*/
                 //loadMenuDataAndListener(sResult);
-                openSubCategoryFragment(sResult);
+                openProductsFragment(sResult);
                 //stub = findViewById(R.id.fragment_menu);
                 /*stub.setLayoutResource(R.layout.sub_menu_layout);
                 inflated = stub.inflate();*/
@@ -870,8 +873,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 }*/
 
                 sharedPreferencesClass.setUserLogStatus(true);
-                Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
-                startService(techSpecsIn);
+                /*Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
+                startService(techSpecsIn);*/
                 break;
             case "UPDATE_SUB_MENU_BUTTONS":
                 /*ArrayList<DataBaseHelper> dbData1 = new ArrayList<>(dbh.getAllMainProducts());

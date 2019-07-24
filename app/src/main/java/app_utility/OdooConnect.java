@@ -5,11 +5,16 @@ import android.util.Log;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
@@ -106,6 +111,8 @@ public class OdooConnect {
         }
         return connection;
     }
+
+
 
     /**
      * You can pass new Object[0] to specify an empty list of conditions and no fields,

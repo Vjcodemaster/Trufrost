@@ -14,8 +14,13 @@ public class DataBaseHelper {
     private String _sub_category_images_link;
     private String _sub_category_images_path;
 
+    private String _first_sub_category_names;
+    private String _first_sub_category_images_path;
+    private String _first_sub_category_images_link;
+
     private int _main_product_id;
     private int _odoo_product_id;
+    private int _first_category_id;
     private String _sub_category_ids;
     private String _individual_product_names;
     private String _individual_product_description;
@@ -28,8 +33,13 @@ public class DataBaseHelper {
     private String _individual_product_tags;
 
     // Empty constructor
-    public DataBaseHelper() {
-
+    public DataBaseHelper(int _main_product_id, String _main_product_names, String _first_sub_category_names, String _product_category_names,
+                          String _sub_category_images_link) {
+        this._main_product_id = _main_product_id;
+        this._main_product_names = _main_product_names;
+        this._first_sub_category_names = _first_sub_category_names;
+        this._product_category_names = _product_category_names;
+        this._sub_category_images_link = _sub_category_images_link;
     }
 
     public DataBaseHelper(String _product_category_names, int nCase) {
@@ -54,17 +64,24 @@ public class DataBaseHelper {
         //this._product_category_images_path = _product_category_images_path;
     }
 
-    public DataBaseHelper(String _main_product_names, String _main_product_description, String _product_category_names,
-                          String _sub_category_images_link) {
+    public DataBaseHelper(String _main_product_names, String _main_product_description, String _first_sub_category_names,
+                          String _first_sub_category_images_link) {
         this._main_product_names = _main_product_names;
         this._main_product_description = _main_product_description;
-        this._product_category_names = _product_category_names;
-        this._sub_category_images_link = _sub_category_images_link;
+        this._first_sub_category_names = _first_sub_category_names;
+        this._first_sub_category_images_link = _first_sub_category_images_link;
+    }
+
+    public DataBaseHelper(){
+
     }
 
     public DataBaseHelper(String _general, int nCase, boolean b) {
         switch (nCase){
             case 1:
+                this._first_sub_category_images_path = _general;
+                break;
+            case 2:
                 this._sub_category_images_path = _general;
                 break;
         }
@@ -79,7 +96,29 @@ public class DataBaseHelper {
         this._product_category_images_path = _product_category_images_path;
     }*/
 
-    public DataBaseHelper(int _main_product_id, int _odoo_product_id, String _main_product_names, String _product_category_names, String _individual_product_names, String _individual_product_description,
+    public DataBaseHelper(int _main_product_id, int _odoo_product_id, int _first_category_id, String _main_product_names, String _first_sub_category_names, String _product_category_names,
+                          String _individual_product_names, String _individual_product_description, String _individual_product_tech_specs_header,
+                          String _individual_product_tech_specs_value, String _individual_product_address, String _individual_product_images_path, String _individual_product_tags) {
+        this._main_product_id = _main_product_id;
+        this._odoo_product_id = _odoo_product_id;
+        this._first_category_id = _first_category_id;
+        this._main_product_names = _main_product_names;
+        this._first_sub_category_names = _first_sub_category_names;
+        this._product_category_names = _product_category_names;
+
+        //this._sub_category_ids = _sub_category_ids;
+        this._individual_product_names = _individual_product_names;
+        this._individual_product_description = _individual_product_description;
+        this._individual_product_tech_specs_header = _individual_product_tech_specs_header;
+        this._individual_product_tech_specs_value = _individual_product_tech_specs_value;
+        this._individual_product_address = _individual_product_address;
+        this._individual_product_images_path = _individual_product_images_path;
+        this._individual_product_tags = _individual_product_tags;
+        //this._individual_product_variant_names = _individual_product_variant_names;
+        //this._individual_product_variant_images_path = _individual_product_variant_images_path;
+    }
+
+    /*public DataBaseHelper(int _main_product_id, int _odoo_product_id, String , String _product_category_names, String _individual_product_names, String _individual_product_description,
                           String _individual_product_address, String _individual_product_images_path, String _individual_product_tech_specs_header,
                           String _individual_product_tech_specs_value, String _individual_product_tags) {
         this._main_product_id = _main_product_id;
@@ -96,7 +135,7 @@ public class DataBaseHelper {
         this._individual_product_tags = _individual_product_tags;
         //this._individual_product_variant_names = _individual_product_variant_names;
         //this._individual_product_variant_images_path = _individual_product_variant_images_path;
-    }
+    }*/
 
     // constructor
     /*public DataBaseHelper(String name, String _phone_number, String _email_id, String _designation){
@@ -306,5 +345,41 @@ public class DataBaseHelper {
     // setting emailID
     public void set_individual_product_tags(String individual_product_tags) {
         this._individual_product_tags = individual_product_tags;
+    }
+
+    public int get_first_category_id(){
+        return  this._first_category_id;
+    }
+
+    public void set_first_category_id(int first_category_id) {
+        this._first_category_id = first_category_id;
+
+    }
+
+    public String get_first_sub_category_names() {
+        return this._first_sub_category_names;
+    }
+
+    // setting emailID
+    public void set_first_sub_category_names(String first_sub_category_names) {
+        this._first_sub_category_names = first_sub_category_names;
+    }
+
+    public String get_first_sub_category_images_path() {
+        return this._first_sub_category_images_path;
+    }
+
+    // setting emailID
+    public void set_first_sub_category_images_path(String first_sub_category_images_path) {
+        this._first_sub_category_images_path = first_sub_category_images_path;
+    }
+
+    public String get_first_sub_category_images_link() {
+        return this._first_sub_category_images_link;
+    }
+
+    // setting emailID
+    public void set_first_sub_category_images_link(String first_sub_category_images_link) {
+        this._first_sub_category_images_link = first_sub_category_images_link;
     }
 }

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -42,6 +43,10 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
     Integer[] nOdooIDArray;
 
     ArrayList<Integer> alIDFetched;
+
+    public TrufrostAsyncTask(Context context) {
+        this.context = context;
+    }
 
     public TrufrostAsyncTask(Context context, DatabaseHandler dbh, Integer[] nOdooIDArray) {
         this.context = context;
@@ -160,10 +165,31 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         }*/
     }
 
-    private void loginTask() {
+    /*private void loginTask() {
         //if (isConnected) {
         try {
             isConnected = OdooConnect.testConnection(SERVER_URL, PORT_NO, DB_NAME, USER_ID, PASSWORD);
+            if (isConnected) {
+                isConnected = true;
+                //return true;
+            } else {
+                isConnected = false;
+                sMsgResult = "Connection error";
+            }
+        } catch (Exception ex) {
+            ERROR_CODE = NETWORK_ERROR_CODE;
+            // Any other exception
+            sMsgResult = "Error: " + ex;
+        }
+        // }
+        //return isConnected;
+    }*/
+
+    private void loginTask() {
+        //if (isConnected) {
+        try {
+            isConnected = OdooConnect.testConnection("https://trufrost.odoo.com", 443,
+                    "trufrosts-master-434286", "admin", "2019@autochip");
             if (isConnected) {
                 isConnected = true;
                 //return true;
@@ -388,7 +414,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;

@@ -1,8 +1,6 @@
 package app_utility;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.autochip.trufrost.HomeScreenActivity;
 import com.autochip.trufrost.R;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ProductsRVAdapter extends RecyclerView.Adapter<ProductsRVAdapter.ProductItemTabHolder> {
 
@@ -41,7 +39,15 @@ public class ProductsRVAdapter extends RecyclerView.Adapter<ProductsRVAdapter.Pr
         this.recyclerView = recyclerView;
         this.sTag = sTag;
         dbh = new DatabaseHandler(context);
-        alDb = new ArrayList<>(dbh.getAllProductsData1());
+        alDb = new ArrayList<>(dbh.getAllProductsDataFromIndividualTable(sTag));
+
+        for (int i=0; i<alDb.size(); i++){
+            alDBID.add(alDb.get(i).get_id());
+            alName.add(alDb.get(i).get_individual_product_names());
+            alDescription.add(alDb.get(i).get_individual_product_description());
+            alImagePath.add(alDb.get(i).get_individual_product_images_path());
+        }
+        /*alDb = new ArrayList<>(dbh.getAllProductsData1());
         for(int i=0; i<alDb.size(); i++){
             if(alDb.get(i).get_product_category_names().equals(sTag)){
                 alName.add(alDb.get(i).get_individual_product_names());
@@ -49,7 +55,7 @@ public class ProductsRVAdapter extends RecyclerView.Adapter<ProductsRVAdapter.Pr
                 alDescription.add(alDb.get(i).get_individual_product_description());
                 alImagePath.add(alDb.get(i).get_individual_product_images_path());
             }
-        }
+        }*/
     }
 
     @NonNull

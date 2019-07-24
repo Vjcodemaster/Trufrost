@@ -57,14 +57,14 @@ public class SubCategoryImageRVAdapter extends RecyclerView.Adapter<SubCategoryI
         holder.ivProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT_NEW", position, "", holder.tvProductName.getText().toString());
+                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_PRODUCTS_FRAGMENT", position, "", holder.tvProductName.getText().toString());
             }
         });
 
         holder.tvProductName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_SUB_CATEGORY_FRAGMENT_NEW", position, "", holder.tvProductName.getText().toString());
+                HomeScreenActivity.onFragmentInteractionListener.onFragmentMessage("OPEN_PRODUCTS_FRAGMENT", position, "", holder.tvProductName.getText().toString());
             }
         });
 

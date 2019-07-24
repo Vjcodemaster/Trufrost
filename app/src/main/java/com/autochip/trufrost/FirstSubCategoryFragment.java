@@ -1,25 +1,24 @@
 package com.autochip.trufrost;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import app_utility.DataBaseHelper;
+import app_utility.DatabaseHandler;
 import app_utility.FirstSubCategoryRVAdapter;
 import app_utility.OnFragmentInteractionListener;
-import app_utility.SubCategoryImageRVAdapter;
 
 
 /**
@@ -43,6 +42,10 @@ public class FirstSubCategoryFragment extends Fragment {
     private TextView tvTitle;
 
     private RecyclerView recyclerView;
+
+    private DatabaseHandler dbh;
+
+    private ArrayList<DataBaseHelper> alFirstSCData;
 
     public FirstSubCategoryFragment() {
         // Required empty public constructor
@@ -72,6 +75,7 @@ public class FirstSubCategoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        dbh = new DatabaseHandler(getActivity());
     }
 
     @Override
@@ -95,8 +99,16 @@ public class FirstSubCategoryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
+        alFirstSCData = new ArrayList<>(dbh.getFirstSubCategoryNameAndImage(mParam1));
+
         ArrayList<String> alFirstSubCategoryNames = new ArrayList<>();
-        alFirstSubCategoryNames.add("Trufrost – Professional Refrigeration Products");
+        ArrayList<String> alFirstSubCategoryImagePath = new ArrayList<>();
+        if(alFirstSCData.size()>=1 && alFirstSCData.get(0).get_first_sub_category_names()!=null)
+            alFirstSubCategoryNames = new ArrayList<>(Arrays.asList(alFirstSCData.get(0).get_first_sub_category_names().split("##")));
+
+        if(alFirstSCData.size()>=1 && alFirstSCData.get(0).get_first_sub_category_images_path()!=null)
+            alFirstSubCategoryImagePath = new ArrayList<>(Arrays.asList(alFirstSCData.get(0).get_first_sub_category_images_path().split("##")));
+        /*alFirstSubCategoryNames.add("Trufrost – Professional Refrigeration Products");
         alFirstSubCategoryNames.add("Trufrost – Ice Machines");
         alFirstSubCategoryNames.add("Trufrost – Cold Rooms");
         alFirstSubCategoryNames.add("Butler – Espresso Coffee Machine");
@@ -104,10 +116,13 @@ public class FirstSubCategoryFragment extends Fragment {
         alFirstSubCategoryNames.add("Butler – Combi Steamers");
         alFirstSubCategoryNames.add("Butler – Bakery Equipment");
         alFirstSubCategoryNames.add("Butler – Catering Products");
-        alFirstSubCategoryNames.add("Butler – Induction Systems");
+        alFirstSubCategoryNames.add("Butler – Induction Systems");*/
 
-        FirstSubCategoryRVAdapter firstSubCategoryRVAdapter = new FirstSubCategoryRVAdapter(getActivity(), recyclerView, alFirstSubCategoryNames);
-        recyclerView.setAdapter(firstSubCategoryRVAdapter);
+        if(alFirstSubCategoryNames.size()>0) {
+            FirstSubCategoryRVAdapter firstSubCategoryRVAdapter = new FirstSubCategoryRVAdapter(getActivity(), recyclerView,
+                    alFirstSubCategoryNames, alFirstSubCategoryImagePath);
+            recyclerView.setAdapter(firstSubCategoryRVAdapter);
+        }
     }
 
     @Override

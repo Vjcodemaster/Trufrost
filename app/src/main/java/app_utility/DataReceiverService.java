@@ -186,7 +186,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             }
                             TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh, nOdooIDArray);
                             trufrostAsyncTask.execute(String.valueOf(2), "");*/
-                            //TASK_STATUS = "RUNNING";
+                        //TASK_STATUS = "RUNNING";
                         /*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
                             timer.cancel();
                             timer.purge();
@@ -223,8 +223,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
             }
         } else if (dataStorage != null && dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
                 dataStorage.alDBIDWithAddress.size() == 0) {
-                            /*Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
-                            startService(techSpecsIn);*/
+            Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
+            startService(techSpecsIn);
             timer.cancel();
             timer.purge();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -305,12 +305,42 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                     myBitmap = BitmapFactory.decodeStream(input);
                     //saveImage(myBitmap);
                     String imagePath = saveImage(myBitmap);
-                    String sIDWithPath = String.valueOf(ID) + ",," + imagePath;
+                    String sIDWithPath = ID + ",," + imagePath;
                     dataStorage.alDBIDWithPath.add(sIDWithPath);
                     dataStorage.alDBIDWithAddress.remove(0);
 
+                    String sOldImagePath;
+                    switch (nSwitchCase) {
+                        case 1:
+                            sOldImagePath = dbh.getImagePathFromMainDB(ID);
+                            if (sOldImagePath != null && sOldImagePath.length() > 2) {
+                                String sTmp = sOldImagePath + "," + imagePath;
+                                dbh.updateFirstSubCategoryImagePathMainDB(new DataBaseHelper(sTmp, 1, false), ID);
+                            } else {
+                                dbh.updateFirstSubCategoryImagePathMainDB(new DataBaseHelper(imagePath, 1, false), ID);
+                            }
+                            break;
+                        case 2:
+                            sOldImagePath = dbh.getImagePathFromSubCategory(ID);
+                            if (sOldImagePath != null && sOldImagePath.length() > 2) {
+                                String sTmp = sOldImagePath + "," + imagePath;
+                                dbh.updateSubCategoryImagePathMainDB(new DataBaseHelper(sTmp, 2, false), ID);
+                            } else {
+                                dbh.updateSubCategoryImagePathMainDB(new DataBaseHelper(imagePath, 2, false), ID);
+                            }
+                            break;
+                        default:
+                            sOldImagePath = dbh.getImagePathFromProducts(ID);
+                            if (sOldImagePath != null && sOldImagePath.length() > 2) {
+                                String sTmp = sOldImagePath + "," + imagePath;
+                                dbh.updateImagePathIndividualProducts(new DataBaseHelper(sTmp), ID);
+                            } else {
+                                dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
+                            }
+                            break;
+                    }
                     //added on 28/03/2019
-                    if (nSwitchCase == 1) {
+                    /*if (nSwitchCase == 1) {
                         String sOldImagePath = dbh.getImagePathFromMainDB(ID);
                         if (sOldImagePath != null && sOldImagePath.length() > 2) {
                             String sTmp = sOldImagePath + "," + imagePath;
@@ -326,7 +356,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                         } else {
                             dbh.updateImagePathIndividualProducts(new DataBaseHelper(imagePath), ID);
                         }
-                    }
+                    }*/
                     TASK_STATUS = "NOT_RUNNING";
                     if (isTimerStopped)
                         downloadImageTask();
