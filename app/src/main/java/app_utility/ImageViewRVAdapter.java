@@ -79,7 +79,7 @@ public class ImageViewRVAdapter extends RecyclerView.Adapter<ImageViewRVAdapter.
                 //openFragment();
                 switch (position){
                     case 0:
-                        sMainMenuName = "Trufrost";//Commercial Kitchen
+                        sMainMenuName = "Commercial Kitchen";//
                         break;
                     case 1:
                         sMainMenuName = "Bar & Pubs";
@@ -91,7 +91,7 @@ public class ImageViewRVAdapter extends RecyclerView.Adapter<ImageViewRVAdapter.
                         sMainMenuName = "Food Retail";
                         break;
                     case 4:
-                        sMainMenuName = "FOOD PRESERVATION";//Food Preservation
+                        sMainMenuName = "Food Preservation";//
                         break;
                     case 5:
                         sMainMenuName = "Bio Medical";

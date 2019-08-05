@@ -101,6 +101,7 @@ public class VolleyTask {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
                         msg = "No response from Server";
                     }
                 }) {
@@ -343,7 +344,7 @@ public class VolleyTask {
 
                                 if (DataReceiverService.refOfService != null) {
 
-                                    String sData = mainID + "##" + sSecondSCImagesURL + "##" + "2";
+                                    String sData = nFirstSCID + "##" + sSecondSCImagesURL + "##" + "2";
                                     String[] sSplitData = sData.split("##");
                                     ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSplitData[1].split(",")));
                                     if (alMultipleUrl.size() > 1) {

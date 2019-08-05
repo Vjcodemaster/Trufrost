@@ -34,7 +34,6 @@ public class SubCategoryGridFragment extends Fragment  {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -63,7 +62,6 @@ public class SubCategoryGridFragment extends Fragment  {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SubCategoryGridFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SubCategoryGridFragment newInstance(String param1, String param2) {
         SubCategoryGridFragment fragment = new SubCategoryGridFragment();
         Bundle args = new Bundle();
@@ -114,6 +112,7 @@ public class SubCategoryGridFragment extends Fragment  {
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
         alSubCategoryData = new ArrayList<>(dbh.getSubCategoryUsingFirstSC(mParam1));
+        //alSubCategoryData = new ArrayList<>(dbh.getAllSubProducts());
 
         ArrayList<String> alSubCategoryNames = new ArrayList<>();
         ArrayList<String> alSubCategoryImagePath = new ArrayList<>();

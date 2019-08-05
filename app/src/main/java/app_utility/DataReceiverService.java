@@ -206,7 +206,9 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
             final int id = Integer.valueOf(saData[0]);
             String sURL = saData[1];
             int nSwitchCase;
-            if (saData.length == 3) {
+            if(saData.length == 4)
+                nSwitchCase = Integer.valueOf(saData[3]);
+            else if (saData.length == 3) {
                 nSwitchCase = Integer.valueOf(saData[2]);
             } else
                 nSwitchCase = 0;
@@ -460,7 +462,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
         Log.e("Service is killed", "");
         super.onTaskRemoved(in);
         /*if (sharedPreferenceClass.getUserTraceableInfo()) {
-            Intent intent = new Intent("app_utility.TrackingService.ServiceStopped");
+            Intent intent = new Intent("app_utility.TrackingService.
+            ServiceStopped");
             sendBroadcast(intent);
         }*/
     }

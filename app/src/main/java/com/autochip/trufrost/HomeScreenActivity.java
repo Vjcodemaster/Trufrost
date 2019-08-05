@@ -52,8 +52,6 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
-import app_utility.TechnicalSpecService;
-import app_utility.TrufrostAsyncTask;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;

@@ -167,9 +167,10 @@ public class TechnicalSpecService extends Service implements OnServiceInterfaceL
                 break;
             case "TASK_COMPLETE":
                 TASK_STATUS = "NOT_RUNNING";
-                for (int i = 0; i < alIDFetched.size(); i++) {
-                    alOdooID.removeAll(alIDFetched);
-                }
+                if (alIDFetched != null)
+                    for (int i = 0; i < alIDFetched.size(); i++) {
+                        alOdooID.removeAll(alIDFetched);
+                    }
                 if (alOdooID.size() == 0)
                     TechnicalSpecService.refOfService.stopSelf();
                 else
