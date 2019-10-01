@@ -33,11 +33,13 @@ public class DataBaseHelper {
     private String _individual_product_tags;
 
     // Empty constructor
-    public DataBaseHelper(int _main_product_id, String _main_product_names, String _first_sub_category_names, String _product_category_names,
+    public DataBaseHelper(int _main_product_id, String _main_product_names, String _first_sub_category_names,
+                          String _first_sub_category_images_link,String _product_category_names,
                           String _sub_category_images_link) {
         this._main_product_id = _main_product_id;
         this._main_product_names = _main_product_names;
         this._first_sub_category_names = _first_sub_category_names;
+        this._first_sub_category_images_link = _first_sub_category_images_link;
         this._product_category_names = _product_category_names;
         this._sub_category_images_link = _sub_category_images_link;
     }

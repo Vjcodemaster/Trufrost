@@ -32,7 +32,7 @@ public class ImageViewRVAdapter extends RecyclerView.Adapter<ImageViewRVAdapter.
     @NonNull
     @Override
     public MenuItemTabHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_grid_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_layout, parent, false);
 
         return new MenuItemTabHolder(view);
     }

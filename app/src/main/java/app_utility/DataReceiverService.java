@@ -212,8 +212,11 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                 nSwitchCase = Integer.valueOf(saData[2]);
             } else
                 nSwitchCase = 0;
-            if (sURL.equals("null") || sURL.equals(""))
+            if (sURL.equals("null") || sURL.equals("")) {
                 dataStorage.alDBIDWithAddress.remove(0);
+                if (isTimerStopped)
+                    downloadImageTask();
+            }
             else {
                 TASK_STATUS = "RUNNING";
                 getBitmapFromURL(sURL, id, nSwitchCase);
@@ -330,6 +333,9 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             } else {
                                 dbh.updateSubCategoryImagePathMainDB(new DataBaseHelper(imagePath, 2, false), ID);
                             }
+                            break;
+                        case 4:
+                            dbh.updateFirstSubCategoryImagePathSubCategoryDB(new DataBaseHelper(imagePath, 1, false), ID);
                             break;
                         default:
                             sOldImagePath = dbh.getImagePathFromProducts(ID);

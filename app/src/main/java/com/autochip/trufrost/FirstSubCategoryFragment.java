@@ -99,15 +99,26 @@ public class FirstSubCategoryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLinearLayoutManager);
 
-        alFirstSCData = new ArrayList<>(dbh.getFirstSubCategoryNameAndImage(mParam1));
+        alFirstSCData = new ArrayList<>(dbh.getFirstSubCategoryNameAndImageFromSubCategoryDB(mParam1));
 
         ArrayList<String> alFirstSubCategoryNames = new ArrayList<>();
         ArrayList<String> alFirstSubCategoryImagePath = new ArrayList<>();
-        if(alFirstSCData.size()>=1 && alFirstSCData.get(0).get_first_sub_category_names()!=null)
+
+        if(alFirstSCData.size()>=1)
+        for (int i=0; i<alFirstSCData.size();i++){
+            String sFirstCategoryName = alFirstSCData.get(i).get_first_sub_category_names();
+            String sFirstCategoryImagePath = alFirstSCData.get(i).get_first_sub_category_images_path();
+            if(sFirstCategoryName!=null)
+            alFirstSubCategoryNames.add(sFirstCategoryName);
+            if(sFirstCategoryImagePath!=null)
+            alFirstSubCategoryImagePath.add(alFirstSCData.get(i).get_first_sub_category_images_path());
+        }
+
+        /*if(alFirstSCData.size()>=1 && alFirstSCData.get(0).get_first_sub_category_names()!=null)
             alFirstSubCategoryNames = new ArrayList<>(Arrays.asList(alFirstSCData.get(0).get_first_sub_category_names().split("##")));
 
         if(alFirstSCData.size()>=1 && alFirstSCData.get(0).get_first_sub_category_images_path()!=null)
-            alFirstSubCategoryImagePath = new ArrayList<>(Arrays.asList(alFirstSCData.get(0).get_first_sub_category_images_path().split("##")));
+            alFirstSubCategoryImagePath = new ArrayList<>(Arrays.asList(alFirstSCData.get(0).get_first_sub_category_images_path().split("##")));*/
         /*alFirstSubCategoryNames.add("Trufrost – Professional Refrigeration Products");
         alFirstSubCategoryNames.add("Trufrost – Ice Machines");
         alFirstSubCategoryNames.add("Trufrost – Cold Rooms");

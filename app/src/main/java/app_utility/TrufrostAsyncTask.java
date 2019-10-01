@@ -128,8 +128,8 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
 
                 //String[] namesArr = (String[]) alOdooID.toArray(new String[alOdooID.size()]);
 
-                validateLoginViaLibrary(nOdooIDArray);
-                //validateLogin(nOdooIDArray);
+                //validateLoginViaLibrary(nOdooIDArray);
+                validateLogin(nOdooIDArray);
                 //getData();
                 //updateTask();
                 break;
@@ -400,7 +400,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
 
             @Override
             public void onLoginFail(AuthError error) {
-
+                String failed = error.toString();
             }
         };
     }

@@ -98,11 +98,11 @@ public class SubCategoryGridFragment extends Fragment  {
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mLinearLayoutManager = new GridLayoutManager(getActivity(), 4);
+            mLinearLayoutManager = new GridLayoutManager(getActivity(), 3);
             mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             // In landscape
         } else {
-            mLinearLayoutManager = new GridLayoutManager(getActivity(), 3);
+            mLinearLayoutManager = new GridLayoutManager(getActivity(), 2);
             mLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             // In portrait
         }
@@ -120,7 +120,7 @@ public class SubCategoryGridFragment extends Fragment  {
             alSubCategoryNames = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_product_category_names().split("##")));
 
         if(alSubCategoryData.get(0).get_sub_category_images_path()!=null)
-            alSubCategoryImagePath = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_sub_category_images_path().split("##")));
+            alSubCategoryImagePath = new ArrayList<>(Arrays.asList(alSubCategoryData.get(0).get_sub_category_images_path().split(",")));
         /*alFirstSubCategoryNames.add("Trufrost – Professional Refrigeration Products");
         alFirstSubCategoryNames.add("Trufrost – Ice Machines");
         alFirstSubCategoryNames.add("Trufrost – Cold Rooms");

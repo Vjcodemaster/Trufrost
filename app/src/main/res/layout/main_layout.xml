@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/iv_products"
         android:layout_width="wrap_content"
-        android:layout_height="140dp"
+        android:layout_height="210dp"
         android:background="@android:drawable/dialog_holo_dark_frame"
         android:scaleType="fitXY"
         android:foreground="?attr/selectableItemBackground"

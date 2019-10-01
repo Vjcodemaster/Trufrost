@@ -14,6 +14,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -22,14 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 import app_utility.DataBaseHelper;
 import app_utility.DatabaseHandler;
 import app_utility.OnFragmentInteractionListener;
@@ -45,29 +44,26 @@ import app_utility.ProductsRVAdapter;
  * create an instance of this fragment.
  */
 public class SubCategoryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    Button[] btnSubCategoryArray;
-    LinearLayout llDynamicSecondParent;
-    ArrayList<DataBaseHelper> dbData;
-    LinearLayout llDynamicParent;
-    DatabaseHandler dbh;
-    String sSubCategory;
-    ArrayList<String> alSubCategory;
+    private Button[] btnSubCategoryArray;
+    private LinearLayout llDynamicSecondParent;
+    private ArrayList<DataBaseHelper> dbData;
+    private LinearLayout llDynamicParent;
+    private DatabaseHandler dbh;
+    private String sSubCategory;
+    private ArrayList<String> alSubCategory;
     private TypedValue typedValue;
-    RecyclerView recyclerViewProducts;
+    private RecyclerView recyclerViewProducts;
     private ExpandableLayout expandableLayout;
 
-    private ViewPager mViewPager;
     private TabLayout tabLayout;
 
     private TabLayout[] tabLayoutsArray;
@@ -83,9 +79,9 @@ public class SubCategoryFragment extends Fragment {
 
     ArrayList<String> alCategories = new ArrayList<>();
 
-    Stack<Integer> pageHistory;
-    int currentPage;
-    boolean saveToHistory;
+    private Stack<Integer> pageHistory;
+    private int currentPage;
+    private boolean saveToHistory;
 
 
     public SubCategoryFragment() {
@@ -137,7 +133,7 @@ public class SubCategoryFragment extends Fragment {
         llDynamicParent = view.findViewById(R.id.ll_dynamic_parent);
         expandableLayout = view.findViewById(R.id.expandable_layout);
 
-        mViewPager = view.findViewById(R.id.viewpager_container);
+        ViewPager mViewPager = view.findViewById(R.id.viewpager_container);
         pageHistory = new Stack<>();
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

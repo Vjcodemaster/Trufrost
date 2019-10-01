@@ -1,6 +1,7 @@
 package app_utility;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,27 @@ public class IndividualProductRVAdapter extends RecyclerView.Adapter<IndividualP
         holder.tvProductName.setVisibility(View.GONE);
 
         Uri uri = Uri.fromFile(new File(alImagesPath.get(position)));
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+        int height;
+        int width;
+        if(imageHeight>imageWidth){
+            height = (int) (250f);
+            width = (int) (210f);
+        } else {
+            height = (int) (150f);
+            width = (int) (250f);
+        }
+        ViewGroup.LayoutParams params = holder.ivProducts.getLayoutParams();
+        params.height = height;
+        params.width = width;
+
+        holder.ivProducts.setLayoutParams(params);
+
         holder.ivProducts.setImageURI(uri);
 
         holder.ivProducts.setOnClickListener(new View.OnClickListener() {

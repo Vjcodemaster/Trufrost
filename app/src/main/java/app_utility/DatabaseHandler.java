@@ -134,6 +134,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_MAIN_PRODUCT_ID + " INTEGER, "
                 + KEY_MAIN_PRODUCT_NAMES + " TEXT, "
                 + KEY_FIRST_SUB_CATEGORY_NAMES + " TEXT, "
+                + KEY_FIRST_SUB_CATEGORY_IMAGES_LINK + " TEXT, "
+                + KEY_FIRST_SUB_CATEGORY_IMAGES_PATH + " TEXT, "
                 + KEY_SUB_CATEGORY_NAMES + " TEXT, "
                 + KEY_SUB_CATEGORY_IMAGES_LINK + " TEXT, "
                 + KEY_SUB_CATEGORY_IMAGES_PATH + " TEXT)";
@@ -220,6 +222,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_MAIN_PRODUCT_ID, dataBaseHelper.get_main_product_id());
         values.put(KEY_MAIN_PRODUCT_NAMES, dataBaseHelper.get_main_product_names());
         values.put(KEY_FIRST_SUB_CATEGORY_NAMES, dataBaseHelper.get_first_sub_category_names());
+        values.put(KEY_FIRST_SUB_CATEGORY_IMAGES_LINK, dataBaseHelper.get_first_sub_category_images_link());
         values.put(KEY_SUB_CATEGORY_NAMES, dataBaseHelper.get_product_category_names());
         values.put(KEY_SUB_CATEGORY_IMAGES_LINK, dataBaseHelper.get_sub_category_images_link());
 
@@ -605,6 +608,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return dataBaseHelperList;
     }
 
+
+    public List<DataBaseHelper> getFirstSubCategoryNameAndImageFromSubCategoryDB(String sKey) {
+        List<DataBaseHelper> dataBaseHelperList = new ArrayList<>();
+        //ArrayList<String> alTechSpecs = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT " + KEY_FIRST_SUB_CATEGORY_NAMES + "," + KEY_FIRST_SUB_CATEGORY_IMAGES_PATH +" FROM " + TABLE_SUB_CATEGORY + " WHERE "
+                + KEY_MAIN_PRODUCT_NAMES + "= '" + sKey+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                DataBaseHelper dataBaseHelper = new DataBaseHelper();
+                dataBaseHelper.set_first_sub_category_names(cursor.getString(0));
+                dataBaseHelper.set_first_sub_category_images_path(cursor.getString(1));
+                // Adding data to list
+                dataBaseHelperList.add(dataBaseHelper);
+                //String s = String.valueOf(dataBaseHelperList.get(cursor.getPosition()).get_individual_product_names());
+                //alTechSpecs.add(s);
+            } while (cursor.moveToNext());
+        }
+
+        // return recent list
+        return dataBaseHelperList;
+    }
+
     public String getProductTechSpecHeading(int sID) {
         Cursor cursor;
         String sName;
@@ -693,6 +723,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //*//**//*ContentValues data=new ContentValues();
         //data.put("Field1","bob");
         //DB.update(Tablename, data, "_id=" + id, null);*//**//*
+    }
+
+    public int updateFirstSubCategoryImagePathSubCategoryDB(DataBaseHelper dataBaseHelper, int KEY_ID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String column = "last_seen";
+        ContentValues values = new ContentValues();
+        //values.put(KEY_NAME, dataBaseHelper.getName());
+        //values.put(KEY_NUMBER, dataBaseHelper.getPhoneNumber());
+        values.put(KEY_FIRST_SUB_CATEGORY_IMAGES_PATH, dataBaseHelper.get_first_sub_category_images_path());
+
+        // updating row
+        //return db.update(TABLE_RECENT, values, column + "last_seen", new String[] {String.valueOf(KEY_ID)});
+        return db.update(TABLE_SUB_CATEGORY, values, "_id" + " = " + KEY_ID, null);
     }
 
     public int update(DataBaseHelper dataBaseHelper, int KEY_ODOO_ID) {

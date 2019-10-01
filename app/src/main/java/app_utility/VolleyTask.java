@@ -191,10 +191,10 @@ public class VolleyTask {
                             //String product = jsonArray.getJSONObject(i).getString("product");
                             //String quantity = jsonArray.getJSONObject(i).getString("quantity_received");
                             String sMainCategory = jsonArray.getJSONObject(i).getString("maincategory");
-                            String sFirstSubCategoryName = jsonArray.getJSONObject(i).getString("subcategory");
-                            String sFirstSubCategoryImageURL = jsonArray.getJSONObject(i).getString("sub_categ_image1");
-                            String sSecondSubCategoryName = jsonArray.getJSONObject(i).get("subcategory1").toString();
-                            String sSecondSubCategoryImageURL = jsonArray.getJSONObject(i).getString("sub_categ_image2");
+                            String sFirstSubCategoryName = jsonArray.getJSONObject(i).getString("subcategory1");
+                            String sFirstSubCategoryImageURL = jsonArray.getJSONObject(i).getString("sub_categ_image2");
+                            String sSecondSubCategoryName = jsonArray.getJSONObject(i).get("subcategory").toString();
+                            String sSecondSubCategoryImageURL = jsonArray.getJSONObject(i).getString("sub_categ_image1");
                             String sIndividualProductName = jsonArray.getJSONObject(i).getString("name");
                             String sIndividualProductImageURL = jsonArray.getJSONObject(i).getString("image");
                             String sIndividualProductDescription = jsonArray.getJSONObject(i).getString("description");
@@ -260,8 +260,10 @@ public class VolleyTask {
                                         lhmMainCategory.put(sMainCategory, hmSecondCategory);
                                     } else {
                                         alProducts.add(sb.toString());
-                                        hm = new HashMap<>();
+                                        hm = new HashMap<>(hmSecondCategory.get(sFirstSubCategoryName));
+                                        //hm = new HashMap<>();
                                         hm.put(sSecondSubCategoryName, alProducts);
+                                        //hmSecondCategory = new HashMap<>(lhmMainCategory.get(sMainCategory));
                                         hmSecondCategory.put(sFirstSubCategoryName, hm);
                                         lhmMainCategory.put(sMainCategory, hmSecondCategory);
                                     }
@@ -296,7 +298,7 @@ public class VolleyTask {
                             int mainID = dbh.getIdForStringTablePermanent(sMainCategoryName);
                             //ArrayList<DataBaseHelper>alFirstSCData = new ArrayList<>(dbh.getAllMainProducts());
 
-                            if (DataReceiverService.refOfService != null) {
+                            /*if (DataReceiverService.refOfService != null) {
 
                                 String sData = mainID + "##" + sFirstSCImagesURL + "##" + "1";
                                 String[] sSplitData = sData.split("##");
@@ -311,7 +313,7 @@ public class VolleyTask {
                                     DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
                                     DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
                                 }
-                            }
+                            }*/
 
                             for(int n=0; n<alFirstSubCategoryNames.size();n++) {
                                 String sFirstSubCategoryName = alFirstSubCategoryNames.get(n);
@@ -337,16 +339,17 @@ public class VolleyTask {
                                 String sSecondSubCategoryName = android.text.TextUtils.join("##", alSecondSubCategoryNames);
                                 String sSecondSCImagesURL = android.text.TextUtils.join("##", alSecondSubCategoryImageURL);
 
+                                String sFirstImageURL = alFirstSubCategoryImageURL.get(alFirstSubCategoryNames.indexOf(sFirstSubCategoryName));
                                 dbh.addDataToSubCategoryTable(new DataBaseHelper(mainID, sMainCategoryName, sFirstSubCategoryName,
-                                        sSecondSubCategoryName, sSecondSCImagesURL));
+                                        sFirstImageURL, sSecondSubCategoryName, sSecondSCImagesURL));
                                 int nFirstSCID = dbh.getIdForStringTableSecondSubCategory(sFirstSubCategoryName);
 
 
                                 if (DataReceiverService.refOfService != null) {
 
                                     String sData = nFirstSCID + "##" + sSecondSCImagesURL + "##" + "2";
-                                    String[] sSplitData = sData.split("##");
-                                    ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSplitData[1].split(",")));
+                                    //String[] sSplitData = sData.split("##");
+                                    ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSecondSCImagesURL.split("#")));
                                     if (alMultipleUrl.size() > 1) {
                                         for (int l = 0; l < alMultipleUrl.size(); l++) {
                                             String sMultiple = nFirstSCID + "##" + alMultipleUrl.get(l) + "##" + "2";
@@ -357,6 +360,10 @@ public class VolleyTask {
                                         DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
                                         DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
                                     }
+
+                                    sData = nFirstSCID + "##" + sFirstImageURL + "##" + "4";
+                                    DataReceiverService.refOfService.dataStorage.alDBIDWithAddress.add(sData);
+                                    DataReceiverService.refOfService.dataStorage.isDataUpdatedAtleastOnce = true;
                                 }
 
                                 for (int l = 0; l < alSecondSubCategoryNames.size(); l++) {

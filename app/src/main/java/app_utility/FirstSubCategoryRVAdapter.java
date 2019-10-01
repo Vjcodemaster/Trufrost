@@ -1,6 +1,8 @@
 package app_utility;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,28 @@ public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCate
         holder.tvCategoryName.setText(alFirstSubCategoryNames.get(position));
         if(alFirstSCImagesPath!=null && alFirstSCImagesPath.size()>position) {
             Uri imageUri = Uri.fromFile(new File(alFirstSCImagesPath.get(position)));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(new File(imageUri.getPath()).getAbsolutePath(), options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            int height;
+            int width;
+            if(imageHeight>imageWidth){
+                height = (int) (250f);
+                width = (int) (210f);
+            } else {
+                height = (int) (150f);
+                width = (int) (250f);
+            }
+            ViewGroup.LayoutParams params = holder.ivCategoryImage.getLayoutParams();
+            params.height = height;
+            params.width = width;
+
+            holder.ivCategoryImage.setLayoutParams(params);
+            //int height = (int) (250f);
+            //int width = (int) (250f);
+
             holder.ivCategoryImage.setImageURI(imageUri);
         }
 
