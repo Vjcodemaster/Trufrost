@@ -37,6 +37,7 @@ import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
 
 public class DataReceiverService extends Service implements OnServiceInterfaceListener {
 
+    int count = 0;
     String channelId = "app_utility.DataReceiverService";
     String channelName = "data_sync";
 
@@ -50,29 +51,29 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     //SharedPreferencesClass sharedPreferencesClass;
 
     NotificationManager notifyMgr;
-    NotificationCompat.Builder nBuilder;
-    NotificationCompat.InboxStyle inboxStyle;
+    //NotificationCompat.Builder nBuilder;
+    //NotificationCompat.InboxStyle inboxStyle;
 
     //AsyncInterface asyncInterface;
 
     Timer timer = new Timer();
     Handler handler = new Handler();
-    public String VOLLEY_STATUS = "NOT_RUNNING";
-    public boolean isMultipleImages = false;
+    //public String VOLLEY_STATUS = "NOT_RUNNING";
+    //public boolean isMultipleImages = false;
 
 
     String TASK_STATUS = "NOT_RUNNING";
 
     //BELAsyncTask belAsyncTask;
     DatabaseHandler dbh;
-    ArrayList<DataBaseHelper> alDBTemporaryData;
+    //ArrayList<DataBaseHelper> alDBTemporaryData;
     public DataStorage dataStorage;
     ArrayList<String> alImageAddress;
 
-    ArrayList<Integer> alAlreadyRequested = new ArrayList<>();
+    //ArrayList<Integer> alAlreadyRequested = new ArrayList<>();
 
-    private boolean isAlreadyExecuted = false;
-    ArrayList<Integer> alOdooID;
+    //private boolean isAlreadyExecuted = false;
+    //ArrayList<Integer> alOdooID;
     boolean isTimerStopped = false;
 
     public DataReceiverService() {
@@ -220,14 +221,14 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
             else {
                 TASK_STATUS = "RUNNING";
                 getBitmapFromURL(sURL, id, nSwitchCase);
+                count++;
                 if (dataStorage.alDBIDWithAddress.size() >= 20) {
                     timer.cancel();
                     timer.purge();
                     isTimerStopped = true;
                 }
             }
-        } else if (dataStorage != null && dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
-                dataStorage.alDBIDWithAddress.size() == 0) {
+        } else if (dataStorage != null && dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING")) {
             Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
             startService(techSpecsIn);
             timer.cancel();
@@ -378,7 +379,6 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                 } /*finally {
 
                 }*/
-                //TODO your background code
             }
         });
 
@@ -407,7 +407,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
         Date d = new Date();
         CharSequence s = DateFormat.format("MM-dd-yy hh-mm-ss", d.getTime());
-        String imageFileName = "IMG" + s + ".jpg";
+        String imageFileName = "IMG" + s +count+ ".jpg";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 + "/Kiosk");
         boolean success = true;
@@ -504,11 +504,11 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     }
 
     public class DataStorage {
-        public boolean isDataUpdatedAtleastOnce = false;
-        public HashMap<Integer, String> hmImageAddressWithDBID;
-        public ArrayList<String> alDBIDWithAddress = new ArrayList<>();
-        public ArrayList<Integer> alDBID = new ArrayList<>();
-        public ArrayList<String> alDBIDWithPath = new ArrayList<>();
+        boolean isDataUpdatedAtleastOnce = false;
+        //public HashMap<Integer, String> hmImageAddressWithDBID;
+        ArrayList<String> alDBIDWithAddress = new ArrayList<>();
+        //public ArrayList<Integer> alDBID = new ArrayList<>();
+        ArrayList<String> alDBIDWithPath = new ArrayList<>();
     }
     /*@Override
     public void onAsyncComplete(String sMSG, int type, String sResult) {

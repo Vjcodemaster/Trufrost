@@ -1,9 +1,7 @@
 package app_utility;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -22,12 +20,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import static app_utility.StaticReferenceClass.DB_NAME;
-import static app_utility.StaticReferenceClass.PASSWORD;
-import static app_utility.StaticReferenceClass.PORT_NO;
-import static app_utility.StaticReferenceClass.SERVER_URL;
-import static app_utility.StaticReferenceClass.USER_ID;
-
 public class VolleyTask {
 
     private Context context;
@@ -35,28 +27,27 @@ public class VolleyTask {
     //private JSONObject jsonObject = new JSONObject();
     private HashMap<String, String> params;
     //private int position;
-    String msg;
-    String sDescription;
+    private String msg;
+    //String sDescription;
 
     private int ERROR_CODE = 0;
 
-    ArrayList<String> alProducts;
-    ArrayList<String> alSubCategory;
+    /*ArrayList<String> alSubCategory;
     ArrayList<String> alMainCategory;
     //ArrayList<Integer> alID;
     ArrayList<Integer> alProductName;
     ArrayList<Integer> alProductSubCategory;
 
-    private HashMap<Integer, String> hmImageAddressWithDBID = new HashMap<>();
+    private HashMap<Integer, String> hmImageAddressWithDBID = new HashMap<>();*/
 
     private LinkedHashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> lhmMainCategory = new LinkedHashMap<>();
-    private LinkedHashMap<String, HashMap<String, ArrayList<String>>> lhmSubCategory = new LinkedHashMap<>();
+    //private LinkedHashMap<String, HashMap<String, ArrayList<String>>> lhmSubCategory = new LinkedHashMap<>();
 
     private LinkedHashMap<String, String> lhmTags = new LinkedHashMap<>();
-    int stockFlag;
-    String URL;
-    JSONObject jsonObject = new JSONObject();
-    DatabaseHandler dbh;
+    //int stockFlag;
+    private String URL;
+    //JSONObject jsonObject = new JSONObject();
+    private DatabaseHandler dbh;
 
     /*public VolleyTask(Context context, JSONObject jsonObject, String sCase, int stockFlag, String URL) {
         this.context = context;
@@ -80,7 +71,7 @@ public class VolleyTask {
                 requestProducts(URL);
                 break;
             case "ODOO_LOGIN":
-                loginOdoo();
+                //loginOdoo();
                 break;
         }
     }
@@ -101,7 +92,7 @@ public class VolleyTask {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        NetworkResponse networkResponse = error.networkResponse;
+                        //NetworkResponse networkResponse = error.networkResponse;
                         msg = "No response from Server";
                     }
                 }) {
@@ -113,7 +104,7 @@ public class VolleyTask {
             }
 
             @Override
-            public byte[] getBody() throws AuthFailureError {
+            public byte[] getBody() { //throws AuthFailureError
                 return new JSONObject(params).toString().getBytes();
                 //return params.toString().g    etBytes();
                 //return params.toString().getBytes();
@@ -138,7 +129,7 @@ public class VolleyTask {
 
     }
 
-    private void loginOdoo() {
+    /*private void loginOdoo() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -146,13 +137,13 @@ public class VolleyTask {
             }
         });
 
-    }
+    }*/
 
 
     private void onPostProductsReceived(int mStatusCode, String response) {
         if (mStatusCode == 200) {
-            JSONObject jsonObject = null;
-            int sResponseCode = 0;
+            JSONObject jsonObject;
+            int sResponseCode;
             //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
             try {
                 jsonObject = new JSONObject(response);
@@ -236,7 +227,7 @@ public class VolleyTask {
                             sb.append("##");
                             sb.append(sProductOdooID);
 
-                            alProducts = new ArrayList<>();
+                            ArrayList<String> alProducts = new ArrayList<>();
 
                             lhmTags.put(sSecondSubCategoryName, sIndividualProductTags);
 
@@ -379,7 +370,7 @@ public class VolleyTask {
                                         int id = dbh.getRecordsCount();
                                         if (DataReceiverService.refOfService != null) {
 
-                                            String sData = id + "##" + alSecondCategory.get(6);
+                                            String sData = id + "##" + alSecondCategory.get(6); //+ alSecondCategory.get(5);
                                             String[] sSplitData = sData.split("##");
                                             ArrayList<String> alMultipleUrl = new ArrayList<>(Arrays.asList(sSplitData[1].split(",")));
                                             if (alMultipleUrl.size() > 1) {
