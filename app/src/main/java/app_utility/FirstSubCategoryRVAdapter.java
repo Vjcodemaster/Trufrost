@@ -48,7 +48,8 @@ public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCate
         holder.tvCategoryName.setText(alFirstSubCategoryNames.get(position));
         if(alFirstSCImagesPath!=null && alFirstSCImagesPath.size()>position) {
             Uri imageUri = Uri.fromFile(new File(alFirstSCImagesPath.get(position)));
-            BitmapFactory.Options options = new BitmapFactory.Options();
+
+            /*BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(new File(imageUri.getPath()).getAbsolutePath(), options);
             int imageHeight = options.outHeight;
@@ -59,14 +60,14 @@ public class FirstSubCategoryRVAdapter extends RecyclerView.Adapter<FirstSubCate
                 height = (int) (250f);
                 width = (int) (210f);
             } else {
-                height = (int) (150f);
+                height = (int) (210f);
                 width = (int) (250f);
             }
             ViewGroup.LayoutParams params = holder.ivCategoryImage.getLayoutParams();
             params.height = height;
             params.width = width;
 
-            holder.ivCategoryImage.setLayoutParams(params);
+            holder.ivCategoryImage.setLayoutParams(params);*/
             //int height = (int) (250f);
             //int width = (int) (250f);
 

@@ -2,18 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="5dp">
 
-    <ImageView
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        card_view:cardBackgroundColor="@android:color/white">
+
+        <ImageView
+            android:id="@+id/iv_products"
+            android:layout_width="wrap_content"
+            android:layout_height="140dp"
+            android:scaleType="fitCenter"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center" />
+    </androidx.cardview.widget.CardView>
+
+
+    <!--<ImageView
         android:id="@+id/iv_products"
         android:layout_width="wrap_content"
         android:layout_height="140dp"
         android:background="@android:drawable/dialog_holo_dark_frame"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:foreground="?attr/selectableItemBackground"
-        android:gravity="center" />
+        android:gravity="center" />-->
 
     <TextView
         android:id="@+id/tv_product_name"

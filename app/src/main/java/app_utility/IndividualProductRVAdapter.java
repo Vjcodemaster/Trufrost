@@ -69,7 +69,7 @@ public class IndividualProductRVAdapter extends RecyclerView.Adapter<IndividualP
 
         Uri uri = Uri.fromFile(new File(alImagesPath.get(position)));
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
+        /*BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(new File(uri.getPath()).getAbsolutePath(), options);
         int imageHeight = options.outHeight;
@@ -87,7 +87,7 @@ public class IndividualProductRVAdapter extends RecyclerView.Adapter<IndividualP
         params.height = height;
         params.width = width;
 
-        holder.ivProducts.setLayoutParams(params);
+        holder.ivProducts.setLayoutParams(params);*/
 
         holder.ivProducts.setImageURI(uri);
 

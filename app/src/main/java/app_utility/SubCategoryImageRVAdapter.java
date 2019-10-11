@@ -54,13 +54,15 @@ public class SubCategoryImageRVAdapter extends RecyclerView.Adapter<SubCategoryI
 
         if(alSubCategoryImagePath!=null && alSubCategoryImagePath.size()>position) {
             Uri imageUri = Uri.fromFile(new File(alSubCategoryImagePath.get(position)));
-            try {
+            holder.ivProducts.setImageURI(imageUri);
+            //commented on 11-10-2019
+            /*try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
                 Bitmap bmp = BitmapScaler.scaleToFitWidth(bitmap, 250) ;
                 holder.ivProducts.setImageBitmap(bmp);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
 
             /*BitmapFactory.Options options = new BitmapFactory.Options();

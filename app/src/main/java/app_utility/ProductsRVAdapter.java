@@ -102,14 +102,16 @@ public class ProductsRVAdapter extends RecyclerView.Adapter<ProductsRVAdapter.Pr
 
         holder.ivProducts.setLayoutParams(params);
         holder.ivProducts.setImageURI(uri);*/
+        holder.ivProducts.setImageURI(uri);
 
-        try {
+        //commented on 11-10-2019
+        /*try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
             Bitmap bmp = BitmapScaler.scaleToFitWidth(bitmap, 190) ;
             holder.ivProducts.setImageBitmap(bmp);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         holder.ivProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
