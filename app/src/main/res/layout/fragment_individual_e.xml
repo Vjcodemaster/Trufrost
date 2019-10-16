@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true"
@@ -20,16 +21,26 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                card_view:cardBackgroundColor="@android:color/white">
+
             <ImageView
                 android:id="@+id/iv_main_image"
                 android:layout_width="325dp"
                 android:layout_height="225dp"
                 android:layout_marginStart="10dp"
-                android:background="@android:drawable/dialog_holo_dark_frame"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:foreground="?attr/selectableItemBackground"
                 android:contentDescription="@string/app_name" />
 
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <LinearLayout

@@ -41,6 +41,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     String channelId = "app_utility.DataReceiverService";
     String channelName = "data_sync";
 
+    public static boolean isTechnicalSpecServiceCompleted = false;
     public static DataReceiverService refOfService;
 
     public static OnServiceInterfaceListener onServiceInterfaceListener;
@@ -140,7 +141,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                             //getBitmapFromURL(sURL, id);
                         }*/
 
-                        downloadImageTask();
+                        if (isTechnicalSpecServiceCompleted)
+                            downloadImageTask();
                         /*if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
                             String[] saData = dataStorage.alDBIDWithAddress.get(0).split("##");
                             final int id = Integer.valueOf(saData[0]);
@@ -207,7 +209,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
             final int id = Integer.valueOf(saData[0]);
             String sURL = saData[1];
             int nSwitchCase;
-            if(saData.length == 4)
+            if (saData.length == 4)
                 nSwitchCase = Integer.valueOf(saData[3]);
             else if (saData.length == 3) {
                 nSwitchCase = Integer.valueOf(saData[2]);
@@ -217,8 +219,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                 dataStorage.alDBIDWithAddress.remove(0);
                 if (isTimerStopped)
                     downloadImageTask();
-            }
-            else {
+            } else {
                 TASK_STATUS = "RUNNING";
                 getBitmapFromURL(sURL, id, nSwitchCase);
                 count++;
@@ -229,8 +230,8 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
                 }
             }
         } else if (dataStorage != null && dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING")) {
-            Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
-            startService(techSpecsIn);
+            /*Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
+            startService(techSpecsIn);*/
             timer.cancel();
             timer.purge();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -407,7 +408,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
 
         Date d = new Date();
         CharSequence s = DateFormat.format("MM-dd-yy hh-mm-ss", d.getTime());
-        String imageFileName = "IMG" + s +count+ ".jpg";
+        String imageFileName = "IMG" + s + count + ".jpg";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 + "/Kiosk");
         boolean success = true;

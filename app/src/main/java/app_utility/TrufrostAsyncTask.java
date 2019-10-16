@@ -602,7 +602,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_OVER");
+        //TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_OVER", null);
     }
 
     public String loadJSONFromAsset() {

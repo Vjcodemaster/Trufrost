@@ -19,5 +19,5 @@ public class StaticReferenceClass {
     public static final String DB_NAME = "trufrost_9oct";//"trufrosts-kiosk-614642";//"Trufrost_live";//"Trufrost_demo";//"trufrosts-master-434286";//"demotrufrosts-master-485814";//"trufrost_11_03";//"AC-Trufrost-04";//"Trufrost-server2";//"Trufrost1402";//"Trufrost-Latest";//"Trufrost1402";//"trufrost_0908";//
 
     public static final String USER_ID = "admin";//"autochipindia505@gmail.com";//"vijay@gmail.com";//"vijay.eh4@gmail.com";//
-    public static final String PASSWORD = "2019@autochip";//"a";//"autochip@505";//"a";////"auto
+    public static final String PASSWORD = "trufrosttest";//"a";//"autochip@505";//"a";////"auto
 }

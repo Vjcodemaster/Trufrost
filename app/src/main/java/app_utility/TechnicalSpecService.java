@@ -163,6 +163,8 @@ public class TechnicalSpecService extends Service implements OnServiceInterfaceL
     public void onServiceMessage(String sMSG, ArrayList<Integer> alIDFetched) {
         switch (sMSG) {
             case "TASK_OVER":
+                /*Intent in = new Intent(getApplicationContext(), DataReceiverService.class);
+                startService(in);*/
                 refOfService.stopSelf();
                 break;
             case "TASK_COMPLETE":
@@ -171,8 +173,13 @@ public class TechnicalSpecService extends Service implements OnServiceInterfaceL
                     for (int i = 0; i < alIDFetched.size(); i++) {
                         alOdooID.removeAll(alIDFetched);
                     }
-                if (alOdooID.size() == 0)
+                if (alOdooID.size() == 0) {
+                    /*Intent in = new Intent(getApplicationContext(), DataReceiverService.class);
+                    startService(in);*/
+                    if(DataReceiverService.refOfService!=null)
+                        DataReceiverService.isTechnicalSpecServiceCompleted = true;
                     TechnicalSpecService.refOfService.stopSelf();
+                }
                 else
                     downloadTechSpecs();
                 break;
