@@ -52,7 +52,6 @@ import app_utility.OnFragmentInteractionListener;
 import app_utility.PermissionHandler;
 import app_utility.SharedPreferencesClass;
 import app_utility.StaticReferenceClass;
-import app_utility.TechnicalSpecService;
 import app_utility.VolleyTask;
 
 import static app_utility.PermissionHandler.WRITE_PERMISSION;
@@ -874,8 +873,8 @@ public class HomeScreenActivity extends AppCompatActivity implements OnFragmentI
                 }*/
 
                 sharedPreferencesClass.setUserLogStatus(true);
-                Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
-                startService(techSpecsIn);
+                /*Intent techSpecsIn = new Intent(HomeScreenActivity.this, TechnicalSpecService.class);
+                startService(techSpecsIn);*/
                 break;
             case "UPDATE_SUB_MENU_BUTTONS":
                 /*ArrayList<DataBaseHelper> dbData1 = new ArrayList<>(dbh.getAllMainProducts());

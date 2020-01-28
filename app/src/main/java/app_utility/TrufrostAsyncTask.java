@@ -128,8 +128,8 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
 
                 //String[] namesArr = (String[]) alOdooID.toArray(new String[alOdooID.size()]);
 
-                //validateLoginViaLibrary(nOdooIDArray);
-                validateLogin(nOdooIDArray);
+                validateLoginViaLibrary(nOdooIDArray);
+                //validateLogin(nOdooIDArray);
                 //getData();
                 //updateTask();
                 break;
@@ -165,7 +165,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
         }
         switch (type) {
             case 2:
-                TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_COMPLETE", alIDFetched);
+                //TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_COMPLETE", alIDFetched);
                 //AdminRegisterService.onAsyncInterfaceListener.onAsyncComplete("ODOO_ID_RETRIEVED", odooID, "");
                 break;
             case 4:
@@ -396,6 +396,7 @@ public class TrufrostAsyncTask extends AsyncTask<String, Void, String> {
                         }
                     }
                 });
+                TechnicalSpecService.onServiceInterfaceListener.onServiceMessage("TASK_COMPLETE", alIDFetched);
             }
 
             @Override

@@ -17,6 +17,8 @@ import android.os.IBinder;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.autochip.trufrost.R;
 
 import java.io.File;
@@ -26,11 +28,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import androidx.core.app.NotificationCompat;
 
 import static android.content.ContentValues.TAG;
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
@@ -41,7 +40,7 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
     String channelId = "app_utility.DataReceiverService";
     String channelName = "data_sync";
 
-    public static boolean isTechnicalSpecServiceCompleted = false;
+    public static boolean isTechnicalSpecServiceCompleted = true;
     public static DataReceiverService refOfService;
 
     public static OnServiceInterfaceListener onServiceInterfaceListener;
@@ -128,78 +127,14 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        /*if(dataStorage!=null && dataStorage.alDBIDWithAddress.size()>=1 && TASK_STATUS.equals("NOT_RUNNING")){
-                            final int id = Integer.valueOf(dataStorage.alDBIDWithAddress.get(0).split("##")[0]);
-                            //String sURL = alImageAddress;
-                            alImageAddress = new ArrayList<>(Collections.singletonList(dataStorage.alDBIDWithAddress.get(0).split("##")[1]));
-                            if(alImageAddress.size()>1){
-                                isMultipleImages = true;
-                            } else {
-                                getBitmapFromURL(alImageAddress.get(0), id);
-                                isMultipleImages = false;
-                            }
-                            //getBitmapFromURL(sURL, id);
-                        }*/
-
                         if (isTechnicalSpecServiceCompleted)
                             downloadImageTask();
-                        /*if (dataStorage != null && dataStorage.alDBIDWithAddress.size() >= 1 && TASK_STATUS.equals("NOT_RUNNING")) {
-                            String[] saData = dataStorage.alDBIDWithAddress.get(0).split("##");
-                            final int id = Integer.valueOf(saData[0]);
-                            String sURL = saData[1];
-                            int nSwitchCase;
-                            if (saData.length == 3) {
-                                nSwitchCase = Integer.valueOf(saData[2]);
-                            } else
-                                nSwitchCase = 0;
-                            if (sURL.equals("null") || sURL.equals(""))
-                                dataStorage.alDBIDWithAddress.remove(0);
-                            else {
-                                TASK_STATUS = "RUNNING";
-                                getBitmapFromURL(sURL, id, nSwitchCase);
-                            }
-                        } else if (dataStorage.isDataUpdatedAtleastOnce && TASK_STATUS.equals("NOT_RUNNING") &&
-                                dataStorage.alDBIDWithAddress.size() == 0) {
-                            *//*Intent techSpecsIn = new Intent(getApplicationContext(), TechnicalSpecService.class);
-                            startService(techSpecsIn);*//*
-                            timer.cancel();
-                            timer.purge();
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                refOfService.stopForeground(true);
-                            }
-                            refOfService.stopSelf();
-                        }*/
-                           /* if(!isAlreadyExecuted) {
-                                alOdooID = new ArrayList<>(dbh.getProductsOdooID());
-                                isAlreadyExecuted = true;
-                            }
-
-                            Integer[] nOdooIDArray;
-                            if(alOdooID.size()>30){
-                                nOdooIDArray = new Integer[30];
-                                for(int i = 0; i < 30; i++) {
-                                    nOdooIDArray[i] = alOdooID.get(i);
-                                    alOdooID.remove(i);
-                                }
-                            } else {
-                                nOdooIDArray = new Integer[alOdooID.size()];
-                                alOdooID.toArray(nOdooIDArray);
-                                timer.cancel();
-                                timer.purge();
-                            }
-                            TrufrostAsyncTask trufrostAsyncTask = new TrufrostAsyncTask(getApplicationContext(), dbh, nOdooIDArray);
-                            trufrostAsyncTask.execute(String.valueOf(2), "");*/
-                        //TASK_STATUS = "RUNNING";
-                        /*else if(dataStorage.alDBIDWithAddress.size() == 0 && TASK_STATUS.equals("NOT_RUNNING")){
-                            timer.cancel();
-                            timer.purge();
-                        }*/
                     }
                 });
             }
 
         };
-        //Starts after 20 sec and will repeat on every 20 sec of time interval.
+        //Starts after 20 sec and will repeat on every 5 sec of time interval.
         timer.schedule(doAsynchronousTask, 0, 5000);
     }
 
@@ -241,55 +176,6 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
         }
     }
 
-    /*public String login(String uname, String password)
-    {
-        InputStream is = null;
-        String result = "";
-        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-
-        try
-        {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://192.168.1.15:8040/web/image/product.template/370/image/");
-
-            nameValuePairs.add(new BasicNameValuePair("emailid", uname));
-            nameValuePairs.add(new BasicNameValuePair("password", password));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-            org.apache.http.HttpResponse response = httpclient.execute(httppost);
-            HttpEntity entity = response.getEntity();
-
-            is = entity.getContent();
-        }
-        catch (Exception e)
-        {
-            Log.e("log_tag", "Error in http connection " + e.toString());
-        }
-
-        // convert response to string
-        try
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader( is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            while ((line = reader.readLine()) != null)
-            {
-                sb.append(line).append("\n");
-            }
-
-            is.close();
-            result = sb.toString();
-
-            Log.v("log","Result: " + result);
-        }
-        catch (Exception e)
-        {
-            Log.v("log", "Error converting result " + e.toString());
-        }
-
-        return result;
-    }*/
     public void getBitmapFromURL(final String src, final int ID, final int nSwitchCase) {
         AsyncTask.execute(new Runnable() {
             Bitmap myBitmap;
@@ -511,16 +397,5 @@ public class DataReceiverService extends Service implements OnServiceInterfaceLi
         //public ArrayList<Integer> alDBID = new ArrayList<>();
         ArrayList<String> alDBIDWithPath = new ArrayList<>();
     }
-    /*@Override
-    public void onAsyncComplete(String sMSG, int type, String sResult) {
-        switch (sMSG) {
-            case "ODOO_ID_RETRIEVED":
-                if (type != StaticReferenceClass.DEFAULT_ODOO_ID) {
-                    sharedPreferencesClass.setUserOdooID(type);
-                }
-                break;
-        }
-        VOLLEY_STATUS = "NOT_RUNNING";
-    }*/
 
 }
